@@ -1,0 +1,49 @@
+<div class="container-fluid">
+  <h2 class="mb-4 fw-bold"><i class="bi bi-truck me-2"></i>Proveedores</h2>
+  <div class="card mb-4">
+    <div class="card-body">
+      <form id="formProveedor" class="row g-3">
+        <div class="col-md-3">
+          <input type="text" id="nombreProveedor" class="form-control" placeholder="Nombre" required />
+        </div>
+        <div class="col-md-3">
+          <input type="text" id="nit" class="form-control" placeholder="NIT" />
+        </div>
+        <div class="col-md-2">
+          <input type="text" id="telefonoProveedor" class="form-control" placeholder="Teléfono" />
+        </div>
+        <div class="col-md-2">
+          <input type="email" id="emailProveedor" class="form-control" placeholder="Correo" />
+        </div>
+        <div class="col-md-2">
+          <input type="text" id="direccionProveedor" class="form-control" placeholder="Dirección" />
+        </div>
+        <div class="col-12 d-grid">
+          <button type="submit" class="btn btn-primary">Registrar Proveedor</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <h6 class="card-title mb-3">Lista de Proveedores</h6>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>NIT</th>
+              <th>Teléfono</th>
+              <th>Correo</th>
+              <th>Dirección</th>
+            </tr>
+          </thead>
+          <tbody id="listaProveedores">
+            <!-- Se cargan dinámicamente -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

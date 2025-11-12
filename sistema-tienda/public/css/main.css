@@ -1,0 +1,139 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f6f8fc;
+  color: #222;
+  margin: 0;
+  padding: 0;
+}
+
+header, .navbar, .footer {
+  background-color: #1574c0;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+}
+
+nav {
+  margin-top: 0.5rem;
+}
+
+nav button, .sidebar-toggle-btn {
+  background: #384679;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  margin: 0 0.2rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+nav button:hover, .sidebar-toggle-btn:hover {
+  background: #384679;
+}
+
+main {
+  padding: 1rem;
+  background: #f6f8fc;
+}
+
+.seccion {
+  display: none;
+}
+
+.seccion.activa {
+  display: block;
+}
+
+form {
+  margin-bottom: 1rem;
+  background: #fff;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+form input {
+  display: block;
+  width: 100%;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  border: 1px solid #e3e6ee;
+  border-radius: 6px;
+}
+
+form button {
+  background: #1574c0;
+  color: white;
+  border: none;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+form button:hover {
+  background: #0d3c6e;
+}
+
+#listaClientes, #listaProductos, #listaCompras {
+  background: #fff;
+  padding: 1rem;
+  border-radius: 12px;
+}
+
+.card, .form-control, .btn, .table, .navbar, .footer {
+  border-radius: 12px !important;
+}
+.card, .navbar, .footer {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+.btn, .nav-link, .form-control {
+  transition: all 0.3s ease-in-out;
+}
+.btn-primary, .navbar {
+  background-color: #1574c0 !important;
+  border: none;
+}
+.btn-primary:hover, .nav-link.active, .nav-link:hover {
+  background-color: #384679 !important;
+  color: #f6f8fc !important;
+}
+.footer {
+  background: #1574c0;
+  color: #fff;
+  text-align: center;
+  padding: 1rem 0;
+  width: 100%;
+  z-index: 1050;
+  margin-top: 2rem;
+  position: static;
+}
+
+/* Estilos para tabs */
+.nav-tabs {
+  border-bottom: 2px solid #e3e6ee;
+}
+
+.nav-tabs .nav-link {
+  color: #666;
+  border: none;
+  border-bottom: 3px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.nav-tabs .nav-link:hover {
+  color: #1574c0;
+  border-bottom-color: #1574c0;
+}
+
+.nav-tabs .nav-link.active {
+  color: #1574c0;
+  background-color: transparent;
+  border-bottom-color: #1574c0;
+  font-weight: 600;
+}
+
+.tab-content {
+  padding-top: 1rem;
+}

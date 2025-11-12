@@ -1,0 +1,24 @@
+<div class="container-fluid">
+  <h2 class="mb-4 fw-bold"><i class="bi bi-cart-check me-2"></i>Compras</h2>
+  <div class="card mb-4">
+    <div class="card-body">
+      <form id="formCompra" class="row g-3">
+        <div class="col-md-6">
+          <input type="text" id="clienteCedula" class="form-control" placeholder="Cédula del Cliente" required />
+        </div>
+        <div class="col-md-6">
+          <input type="number" id="total" class="form-control" placeholder="Total" required />
+        </div>
+        <div class="col-12 d-grid">
+          <button type="submit" class="btn btn-primary">Registrar Compra</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <h6 class="card-title mb-3">Lista de Compras</h6>
+      <div id="listaCompras"></div>
+    </div>
+  </div>
+</div>

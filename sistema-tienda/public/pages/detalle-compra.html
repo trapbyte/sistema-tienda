@@ -1,0 +1,46 @@
+<div class="container-fluid">
+  <h2 class="mb-4 fw-bold"><i class="bi bi-receipt me-2"></i>Detalle Compra</h2>
+  <div class="card mb-4">
+    <div class="card-body">
+      <form id="formDetalleCompra" class="row g-3">
+        <div class="col-md-3">
+          <input type="number" id="compraId" class="form-control" placeholder="ID Compra" required />
+        </div>
+        <div class="col-md-3">
+          <input type="number" id="productoId" class="form-control" placeholder="ID Producto" required />
+        </div>
+        <div class="col-md-2">
+          <input type="number" id="cantidad" class="form-control" placeholder="Cantidad" required />
+        </div>
+        <div class="col-md-2">
+          <input type="number" id="precio_unitario" class="form-control" placeholder="Precio Unitario" required />
+        </div>
+        <div class="col-md-2 d-grid">
+          <button type="submit" class="btn btn-primary">Registrar Detalle</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <h6 class="card-title mb-3">Lista de Detalles de Compra</h6>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Compra</th>
+              <th>Producto</th>
+              <th>Cantidad</th>
+              <th>Precio Unitario</th>
+              <th>Subtotal</th>
+            </tr>
+          </thead>
+          <tbody id="listaDetallesCompra">
+            <!-- Se cargan dinámicamente -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
