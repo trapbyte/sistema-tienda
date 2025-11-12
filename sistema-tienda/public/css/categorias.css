@@ -1,0 +1,25 @@
+#buscadorCategorias {
+  margin-bottom: 16px;
+  max-width: 400px;
+}
+
+.table th, .table td {
+  vertical-align: middle;
+  text-align: left;
+}
+
+#tablaCategorias tr {
+  transition: background 0.2s;
+}
+
+#tablaCategorias tr:hover {
+  background: #dde4fb;
+}
+
+/* Separación entre tabs de navegación */
+.nav-tabs .nav-item {
+  margin-right: 3px;
+}
+.nav-tabs .nav-item:last-child {
+  margin-right: 0;
+}
