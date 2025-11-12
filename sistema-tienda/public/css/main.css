@@ -134,6 +134,14 @@ form button:hover {
   font-weight: 600;
 }
 
+/* Separación entre tabs de navegación */
+.nav-tabs .nav-item {
+  margin-right: 3px;
+}
+.nav-tabs .nav-item:last-child {
+  margin-right: 0;
+}
+
 .tab-content {
   padding-top: 1rem;
 }
