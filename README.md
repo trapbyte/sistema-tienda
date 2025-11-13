@@ -54,12 +54,6 @@ Este proyecto es un sistema web para la gestión de una tienda, desarrollado con
 - `npm start` — Inicia el servidor en modo producción.
 - `npm run dev` — Inicia el servidor en modo desarrollo (si tienes nodemon).
 
-## Recomendaciones
-
-- No subas tu archivo `.env` ni credenciales sensibles al repositorio.
-- Revisa la configuración de CORS si accedes desde otro origen.
-- Para desarrollo, usa una base de datos local y configura los modelos con `timestamps` según tu estructura.
-
 ## Licencia
 
 MIT
