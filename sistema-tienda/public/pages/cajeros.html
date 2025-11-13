@@ -3,12 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestión de Categorías</title>
-  <!-- Bootstrap CSS -->
+  <title>Gestión de Cajeros</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
-  <!-- Google Material Icons -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0">
   <link rel="stylesheet" href="../css/main.css">
   <link rel="stylesheet" href="../css/navbar.css">
@@ -71,14 +68,14 @@
           <span class="nav-tooltip">Detalle Compra</span>
         </li>
         <li class="nav-item">
-          <a href="categorias.html" class="nav-link active" data-module="categorias">
+          <a href="categorias.html" class="nav-link" data-module="categorias">
             <span class="nav-icon material-symbols-rounded">category</span>
             <span class="nav-label">Categorías</span>
           </a>
           <span class="nav-tooltip">Categorías</span>
         </li>
         <li class="nav-item">
-          <a href="cajeros.html" class="nav-link" data-module="cajeros">
+          <a href="cajeros.html" class="nav-link active" data-module="cajeros">
             <span class="nav-icon material-symbols-rounded">badge</span>
             <span class="nav-label">Cajeros</span>
           </a>
@@ -103,13 +100,10 @@
       </ul>
     </nav>
   </aside>
-  
   <main class="main-content">
     <div class="container-fluid">
-      <h2 class="mb-4 fw-bold"><i class="bi bi-tags me-2"></i>Gestión de Categorías</h2>
-      
-      <!-- Tabs de navegación -->
-      <ul class="nav nav-tabs mb-4" id="categoriasTabs" role="tablist">
+      <h2 class="mb-4 fw-bold"><i class="bi bi-person-badge me-2"></i>Gestión de Cajeros</h2>
+      <ul class="nav nav-tabs mb-4" id="cajerosTabs" role="tablist">
         <li class="nav-item" role="presentation">
           <button class="nav-link active" id="listar-tab" data-bs-toggle="tab" data-bs-target="#listar" type="button" role="tab">
             <i class="bi bi-list-ul me-1"></i> Listar
@@ -117,7 +111,7 @@
         </li>
         <li class="nav-item" role="presentation">
           <button class="nav-link" id="registrar-tab" data-bs-toggle="tab" data-bs-target="#registrar" type="button" role="tab">
-            <i class="bi bi-plus-square me-1"></i> Registrar
+            <i class="bi bi-person-plus me-1"></i> Registrar
           </button>
         </li>
         <li class="nav-item" role="presentation">
@@ -131,27 +125,26 @@
           </button>
         </li>
       </ul>
-
-      <!-- Contenido de los tabs -->
-      <div class="tab-content" id="categoriasTabContent">
-        
+      <div class="tab-content" id="cajerosTabContent">
         <!-- TAB LISTAR -->
         <div class="tab-pane fade show active" id="listar" role="tabpanel">
           <div class="card">
             <div class="card-body">
-              <h6 class="card-title mb-3">Lista de Categorías</h6>
+              <h6 class="card-title mb-3">Lista de Cajeros</h6>
               <div class="mb-3">
-                <input type="text" id="buscadorCategorias" class="form-control" placeholder="Buscar categoría por nombre o código...">
+                <input type="text" id="buscadorCajeros" class="form-control" placeholder="Buscar cajero por nombre, ID o teléfono...">
               </div>
               <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
                   <thead>
                     <tr>
-                      <th>Código</th>
+                      <th>ID</th>
                       <th>Nombre</th>
+                      <th>Teléfono</th>
+                      <th>Dirección</th>
                     </tr>
                   </thead>
-                  <tbody id="tablaCategorias">
+                  <tbody id="tablaCajeros">
                     <!-- Se cargan dinámicamente -->
                   </tbody>
                 </table>
@@ -159,24 +152,31 @@
             </div>
           </div>
         </div>
-
         <!-- TAB REGISTRAR -->
         <div class="tab-pane fade" id="registrar" role="tabpanel">
           <div class="card">
             <div class="card-body">
-              <h6 class="card-title mb-3">Registrar Nueva Categoría</h6>
-              <form id="formCategoria" class="row g-3">
-                <div class="col-md-4">
-                  <label for="codigoCategoria" class="form-label">Código *</label>
-                  <input type="text" id="codigoCategoria" class="form-control" placeholder="Código" required />
+              <h6 class="card-title mb-3">Registrar Nuevo Cajero</h6>
+              <form id="formCajero" class="row g-3">
+                <div class="col-md-3">
+                  <label for="idCajero" class="form-label">ID *</label>
+                  <input type="text" id="idCajero" class="form-control" placeholder="ID" required />
                 </div>
-                <div class="col-md-6">
-                  <label for="nombreCategoria" class="form-label">Nombre *</label>
-                  <input type="text" id="nombreCategoria" class="form-control" placeholder="Nombre" required />
+                <div class="col-md-3">
+                  <label for="nombreCajero" class="form-label">Nombre *</label>
+                  <input type="text" id="nombreCajero" class="form-control" placeholder="Nombre" required />
+                </div>
+                <div class="col-md-3">
+                  <label for="telefonoCajero" class="form-label">Teléfono</label>
+                  <input type="text" id="telefonoCajero" class="form-control" placeholder="Teléfono" />
+                </div>
+                <div class="col-md-3">
+                  <label for="direccionCajero" class="form-label">Dirección</label>
+                  <input type="text" id="direccionCajero" class="form-control" placeholder="Dirección" />
                 </div>
                 <div class="col-12">
                   <button type="submit" class="btn btn-primary">
-                    <i class="bi bi-save me-1"></i> Registrar Categoría
+                    <i class="bi bi-save me-1"></i> Registrar Cajero
                   </button>
                   <button type="reset" class="btn btn-secondary ms-2">
                     <i class="bi bi-x-circle me-1"></i> Limpiar
@@ -186,24 +186,31 @@
             </div>
           </div>
         </div>
-
         <!-- TAB MODIFICAR -->
         <div class="tab-pane fade" id="modificar" role="tabpanel">
           <div class="card">
             <div class="card-body">
-              <h6 class="card-title mb-3">Actualizar Categoría Existente</h6>
-              <form id="formActualizarCategoria" class="row g-3">
-                <div class="col-md-4">
-                  <label for="codigoActualizar" class="form-label">Código *</label>
-                  <input type="text" id="codigoActualizar" class="form-control" placeholder="Código" required />
+              <h6 class="card-title mb-3">Actualizar Cajero Existente</h6>
+              <form id="formActualizarCajero" class="row g-3">
+                <div class="col-md-3">
+                  <label for="idCajeroActualizar" class="form-label">ID *</label>
+                  <input type="text" id="idCajeroActualizar" class="form-control" placeholder="ID" required />
                 </div>
-                <div class="col-md-6">
-                  <label for="nombreActualizar" class="form-label">Nombre</label>
-                  <input type="text" id="nombreActualizar" class="form-control" placeholder="Nombre" />
+                <div class="col-md-3">
+                  <label for="nombreCajeroActualizar" class="form-label">Nombre</label>
+                  <input type="text" id="nombreCajeroActualizar" class="form-control" placeholder="Nombre" />
+                </div>
+                <div class="col-md-3">
+                  <label for="telefonoCajeroActualizar" class="form-label">Teléfono</label>
+                  <input type="text" id="telefonoCajeroActualizar" class="form-control" placeholder="Teléfono" />
+                </div>
+                <div class="col-md-3">
+                  <label for="direccionCajeroActualizar" class="form-label">Dirección</label>
+                  <input type="text" id="direccionCajeroActualizar" class="form-control" placeholder="Dirección" />
                 </div>
                 <div class="col-12">
                   <button type="submit" class="btn btn-warning">
-                    <i class="bi bi-pencil-square me-1"></i> Actualizar Categoría
+                    <i class="bi bi-pencil-square me-1"></i> Actualizar Cajero
                   </button>
                   <button type="reset" class="btn btn-secondary ms-2">
                     <i class="bi bi-x-circle me-1"></i> Limpiar
@@ -213,24 +220,23 @@
             </div>
           </div>
         </div>
-
         <!-- TAB ELIMINAR -->
         <div class="tab-pane fade" id="eliminar" role="tabpanel">
           <div class="card">
             <div class="card-body">
-              <h6 class="card-title mb-3">Eliminar Categoría</h6>
+              <h6 class="card-title mb-3">Eliminar Cajero</h6>
               <div class="alert alert-warning">
                 <i class="bi bi-exclamation-triangle me-2"></i>
-                Esta acción no se puede deshacer. Por favor, verifique el código antes de eliminar.
+                Esta acción no se puede deshacer. Por favor, verifique el ID antes de eliminar.
               </div>
-              <form id="formEliminarCategoria" class="row g-3">
+              <form id="formEliminarCajero" class="row g-3">
                 <div class="col-md-4">
-                  <label for="codigoEliminar" class="form-label">Código de la Categoría *</label>
-                  <input type="text" id="codigoEliminar" class="form-control" placeholder="Código" required />
+                  <label for="idCajeroEliminar" class="form-label">ID del Cajero *</label>
+                  <input type="text" id="idCajeroEliminar" class="form-control" placeholder="ID" required />
                 </div>
                 <div class="col-12">
                   <button type="submit" class="btn btn-danger">
-                    <i class="bi bi-trash me-1"></i> Eliminar Categoría
+                    <i class="bi bi-trash me-1"></i> Eliminar Cajero
                   </button>
                   <button type="reset" class="btn btn-secondary ms-2">
                     <i class="bi bi-x-circle me-1"></i> Limpiar
@@ -240,18 +246,14 @@
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </main>
-
   <footer class="footer mt-5">
     <span>Sistema de Gestión de Tienda &copy; 2025</span>
   </footer>
-
-  <!-- Bootstrap Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../js/navbar.js"></script>
-  <script src="../js/categorias.js"></script>
+  <script src="../js/cajeros.js"></script>
 </body>
 </html>
