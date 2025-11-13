@@ -19,6 +19,6 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     tableName: 'cajeros',
-    timestamps: false
+    timestamps: true
   });
 };

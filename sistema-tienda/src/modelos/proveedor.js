@@ -19,7 +19,7 @@ const defineProveedor = (sequelize, DataTypes) => {
     }
   }, {
     tableName: 'proveedores',
-    timestamps: true
+    timestamps: false // Cambia a false si no usas createdAt/updatedAt en la tabla
   });
 };
 
