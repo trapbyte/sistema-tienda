@@ -14,6 +14,7 @@ const ProveedorRutas = require('./rutas/rutasProveedor');
 const DetalleCompraRutas = require('./rutas/rutasDetalleCompra');
 const CajeroRutas = require('./rutas/rutasCajero');
 const CategoriaRutas = require('./rutas/rutasCategoria');
+const rutasProveedorProducto = require('./rutas/rutasProveedorProducto');
 
 // Middlewares
 app.use(express.json());
@@ -28,6 +29,7 @@ app.use('/proveedores', ProveedorRutas);
 app.use('/detalles-compra', DetalleCompraRutas);
 app.use('/cajeros', CajeroRutas);
 app.use('/categorias', CategoriaRutas);
+app.use('/proveedores-productos', rutasProveedorProducto);
 
 // Ruta principal para servir index.html
 app.get('/', (req, res) => {
@@ -47,3 +49,6 @@ sequelize.sync({ alter: true, force: false })
   .catch(err => {
     console.error('❌ Error en la sincronización:', err);
   });
+
+// Todas las rutas están correctamente importadas y usadas.
+// No se requieren cambios aquí si los modelos y rutas están bien definidos.

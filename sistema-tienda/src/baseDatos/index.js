@@ -27,10 +27,10 @@ const sequelize = new Sequelize(
 
 // Definir modelos
 const Cliente = defineCliente(sequelize, DataTypes);
-const Compra = defineCompra(sequelize, DataTypes);
+const Factura = defineCompra(sequelize, DataTypes); // Factura para compras
 const Producto = defineProducto(sequelize, DataTypes);
 const Proveedor = defineProveedor(sequelize, DataTypes);
-const DetalleCompra = defineDetalleCompra(sequelize, DataTypes);
+const DetalleFactura = defineDetalleCompra(sequelize, DataTypes); // DetalleFactura para detalle de compra
 const Cajero = defineCajero(sequelize, DataTypes);
 const Categoria = defineCategoria(sequelize, DataTypes);
 const PuntosCliente = definePuntosCliente(sequelize, DataTypes);
@@ -40,24 +40,24 @@ const ProveedorProducto = defineProveedorProducto(sequelize, DataTypes);
 // Relaciones entre tablas
 
 // Cliente -> Factura (1 a muchos)
-Cliente.hasMany(Compra, { foreignKey: 'ide_cli' });
-Compra.belongsTo(Cliente, { foreignKey: 'ide_cli' });
+Cliente.hasMany(Factura, { foreignKey: 'ide_cli' });
+Factura.belongsTo(Cliente, { foreignKey: 'ide_cli' });
 
 // Cajero -> Factura (1 a muchos)
-Cajero.hasMany(Compra, { foreignKey: 'ide_caj' });
-Compra.belongsTo(Cajero, { foreignKey: 'ide_caj' });
+Cajero.hasMany(Factura, { foreignKey: 'ide_caj' });
+Factura.belongsTo(Cajero, { foreignKey: 'ide_caj' });
 
 // Categoria -> Producto (1 a muchos)
 Categoria.hasMany(Producto, { foreignKey: 'cod_cat' });
 Producto.belongsTo(Categoria, { foreignKey: 'cod_cat' });
 
 // Compra -> DetalleFactura (1 a muchos)
-Compra.hasMany(DetalleCompra, { foreignKey: 'nro_fac' });
-DetalleCompra.belongsTo(Compra, { foreignKey: 'nro_fac' });
+Factura.hasMany(DetalleFactura, { foreignKey: 'nro_fac' });
+DetalleFactura.belongsTo(Factura, { foreignKey: 'nro_fac' });
 
 // Producto -> DetalleFactura (1 a muchos)
-Producto.hasMany(DetalleCompra, { foreignKey: 'cod_pro' });
-DetalleCompra.belongsTo(Producto, { foreignKey: 'cod_pro' });
+Producto.hasMany(DetalleFactura, { foreignKey: 'cod_pro' });
+DetalleFactura.belongsTo(Producto, { foreignKey: 'cod_pro' });
 
 // Conexión y sincronización
 sequelize.authenticate()
@@ -70,10 +70,10 @@ sequelize.sync({ alter: true, force: false })
 
 module.exports = {
   Cliente,
-  Compra,
+  Factura,
   Producto,
   Proveedor,
-  DetalleCompra,
+  DetalleFactura,
   Cajero,
   Categoria,
   PuntosCliente,
