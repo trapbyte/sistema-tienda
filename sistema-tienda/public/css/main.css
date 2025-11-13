@@ -145,3 +145,67 @@ form button:hover {
 .tab-content {
   padding-top: 1rem;
 }
+
+/* --- CLIENTES --- */
+#buscadorClientes, #buscadorClientesListar {
+  margin-bottom: 16px;
+  max-width: 400px;
+}
+.table th, .table td {
+  vertical-align: middle;
+  text-align: left;
+}
+#tablaClientes tr, #tablaClientesListar tr {
+  transition: background 0.2s;
+}
+#tablaClientes tr:hover, #tablaClientesListar tr:hover {
+  background: #dde4fb;
+}
+
+/* --- PRODUCTOS --- */
+#buscadorProductos {
+  margin-bottom: 16px;
+  max-width: 400px;
+}
+#tablaProductos tr {
+  transition: background 0.2s;
+}
+#tablaProductos tr:hover {
+  background: #dde4fb;
+}
+
+/* --- PROVEEDORES --- */
+#buscadorProveedores {
+  margin-bottom: 16px;
+  max-width: 400px;
+}
+#tablaProveedores tr {
+  transition: background 0.2s;
+}
+#tablaProveedores tr:hover {
+  background: #dde4fb;
+}
+
+/* --- CATEGORIAS --- */
+#buscadorCategorias {
+  margin-bottom: 16px;
+  max-width: 400px;
+}
+#tablaCategorias tr {
+  transition: background 0.2s;
+}
+#tablaCategorias tr:hover {
+  background: #dde4fb;
+}
+
+/* --- CAJEROS --- */
+#buscadorCajeros {
+  margin-bottom: 16px;
+  max-width: 400px;
+}
+#tablaCajeros tr {
+  transition: background 0.2s;
+}
+#tablaCajeros tr:hover {
+  background: #dde4fb;
+}
