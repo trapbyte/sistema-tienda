@@ -3,7 +3,7 @@ const { PuntosCliente, Cliente, DetallePuntos } = require('../baseDatos');
 const listarPuntosClientes = async (req, res) => {
   try {
     const puntos = await PuntosCliente.findAll({
-      include: [{ model: Cliente, attributes: ['ide_cli', 'nom_cli'] }]
+      include: [{ model: Cliente, as: 'Cliente', attributes: ['ide_cli', 'nom_cli'] }]
     });
     res.status(200).json({ mensaje: "Lista de puntos por cliente", resultado: puntos });
   } catch (error) {
@@ -16,7 +16,7 @@ const obtenerPuntosCliente = async (req, res) => {
     const { ide_cli } = req.params;
     const puntos = await PuntosCliente.findOne({
       where: { ide_cli },
-      include: [{ model: Cliente, attributes: ['ide_cli', 'nom_cli'] }]
+      include: [{ model: Cliente, as: 'Cliente', attributes: ['ide_cli', 'nom_cli'] }]
     });
     if (!puntos) {
       return res.status(404).json({ mensaje: "No se encontraron puntos para este cliente", resultado: null });
@@ -30,7 +30,7 @@ const obtenerPuntosCliente = async (req, res) => {
 const listarDetallePuntos = async (req, res) => {
   try {
     const detalles = await DetallePuntos.findAll({
-      include: [{ model: Cliente, attributes: ['ide_cli', 'nom_cli'] }],
+      include: [{ model: Cliente, as: 'Cliente', attributes: ['ide_cli', 'nom_cli'] }],
       order: [['fecha', 'DESC']]
     });
     res.status(200).json({ mensaje: "Historial de puntos", resultado: detalles });

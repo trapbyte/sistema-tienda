@@ -140,10 +140,32 @@ const obtenerFacturaDetallada = async (req, res) => {
   }
 };
 
+const obtenerCompraPorId = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const compra = await Factura.findByPk(id, {
+      include: [
+        { model: Cliente, attributes: ['ide_cli', 'nom_cli'] },
+        { model: Cajero, attributes: ['ide_caj', 'nom_caj'] },
+        { 
+          model: DetalleFactura, 
+          include: [{ model: Producto, attributes: ['nom_pro', 'pre_pro'] }]
+        }
+      ]
+    });
+    if (!compra) {
+      return res.status(404).json({ mensaje: "Compra no encontrada", resultado: null });
+    }
+    res.status(200).json({ mensaje: "Compra encontrada", resultado: compra });
+  } catch (error) {
+    res.status(400).json({ mensaje: error.message, resultado: null });
+  }
+};
+
 module.exports = {
-  registrarCompra,
   listarCompras,
+  registrarCompra,
+  obtenerCompraPorId,
   actualizarCompra,
-  borrarCompra,
-  obtenerFacturaDetallada,
+  eliminarCompra: borrarCompra
 };

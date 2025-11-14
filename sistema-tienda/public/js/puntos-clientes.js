@@ -1,4 +1,4 @@
-const API_BASE = "http://localhost:3000";
+window.API_BASE = window.API_BASE || "http://localhost:3000";
 
 async function cargarPuntosClientes() {
   try {
