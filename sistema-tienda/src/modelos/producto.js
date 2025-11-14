@@ -9,6 +9,10 @@ const defineProducto = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false
     },
+    descripcion: { // Nuevo campo
+      type: DataTypes.STRING(120),
+      allowNull: true
+    },
     cant_pro: {
       type: DataTypes.INTEGER,
       allowNull: false,

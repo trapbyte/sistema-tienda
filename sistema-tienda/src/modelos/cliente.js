@@ -19,7 +19,7 @@ const defineCliente = (sequelize, DataTypes) => {
     }
   }, {
     tableName: 'clientes',
-    timestamps: true
+    timestamps: false
   });
 };
 

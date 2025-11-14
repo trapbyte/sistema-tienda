@@ -72,16 +72,20 @@ async function cargarProductos() {
     const tabla = document.getElementById("tablaProductos");
     if (data.resultado && data.resultado.length > 0) {
       tabla.innerHTML = data.resultado
-        .map((p) => `
+        .map((p) => {
+          let desc = p.descripcion || '';
+          if (desc.length > 40) desc = desc.substring(0, 40) + '...';
+          return `
           <tr>
             <td>${p.cod_pro}</td>
             <td>${p.nom_pro}</td>
-            <td>${p.descripcion || ''}</td>
+            <td>${desc}</td>
             <td>${p.val_pro}</td>
             <td>${p.cant_pro}</td>
             <td>${p.cod_cat || ''}</td>
           </tr>
-        `)
+        `;
+        })
         .join("");
     } else {
       tabla.innerHTML = '<tr><td colspan="6" class="text-center">No hay productos registrados</td></tr>';
