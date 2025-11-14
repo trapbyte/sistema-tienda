@@ -42,14 +42,14 @@
           </a>
           <span class="nav-tooltip">Clientes</span>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" data-admin-only>
           <a href="cajeros.html" class="nav-link" data-module="cajeros">
             <span class="nav-icon material-symbols-rounded">badge</span>
             <span class="nav-label">Cajeros</span>
           </a>
           <span class="nav-tooltip">Cajeros</span>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" data-admin-only>
           <a href="proveedores.html" class="nav-link" data-module="proveedores">
             <span class="nav-icon material-symbols-rounded">local_shipping</span>
             <span class="nav-label">Proveedores</span>
@@ -77,12 +77,19 @@
           </a>
           <span class="nav-tooltip">Compras</span>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" data-admin-only>
           <a href="detalle-compra.html" class="nav-link" data-module="detalle-compra">
             <span class="nav-icon material-symbols-rounded">receipt_long</span>
             <span class="nav-label">Detalle Compra</span>
           </a>
           <span class="nav-tooltip">Detalle Compra</span>
+        </li>
+        <li class="nav-item">
+          <a href="puntos-clientes.html" class="nav-link">
+            <span class="nav-icon material-symbols-rounded">stars</span>
+            <span class="nav-label">Puntos Clientes</span>
+          </a>
+          <span class="nav-tooltip">Puntos Clientes</span>
         </li>
       </ul>
       <ul class="nav-list secondary-nav">
@@ -94,7 +101,7 @@
           <span class="nav-tooltip">Perfil</span>
         </li>
         <li class="nav-item">
-          <a href="#" class="nav-link">
+          <a href="#" class="nav-link" onclick="cerrarSesion()">
             <span class="nav-icon material-symbols-rounded">logout</span>
             <span class="nav-label">Salir</span>
           </a>
@@ -251,6 +258,7 @@
 
   <!-- Bootstrap Bundle -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/auth.js"></script>
   <script src="../js/navbar.js"></script>
   <script src="../js/categorias.js"></script>
 </body>

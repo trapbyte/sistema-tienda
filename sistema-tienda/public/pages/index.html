@@ -44,14 +44,14 @@
           </a>
           <span class="nav-tooltip">Clientes</span>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" data-admin-only>
           <a href="cajeros.html" class="nav-link">
             <span class="nav-icon material-symbols-rounded">badge</span>
             <span class="nav-label">Cajeros</span>
           </a>
           <span class="nav-tooltip">Cajeros</span>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" data-admin-only>
           <a href="proveedores.html" class="nav-link">
             <span class="nav-icon material-symbols-rounded">local_shipping</span>
             <span class="nav-label">Proveedores</span>
@@ -79,24 +79,31 @@
           </a>
           <span class="nav-tooltip">Compras</span>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" data-admin-only>
           <a href="detalle-compra.html" class="nav-link">
             <span class="nav-icon material-symbols-rounded">receipt_long</span>
             <span class="nav-label">Detalle Compra</span>
           </a>
           <span class="nav-tooltip">Detalle Compra</span>
         </li>
+        <li class="nav-item">
+          <a href="puntos-clientes.html" class="nav-link">
+            <span class="nav-icon material-symbols-rounded">stars</span>
+            <span class="nav-label">Puntos Clientes</span>
+          </a>
+          <span class="nav-tooltip">Puntos Clientes</span>
+        </li>
       </ul>
       <ul class="nav-list secondary-nav">
         <li class="nav-item">
-          <a href="#" class="nav-link">
+          <a href="#" class="nav-link" id="perfilUsuario">
             <span class="nav-icon material-symbols-rounded">account_circle</span>
             <span class="nav-label">Perfil</span>
           </a>
           <span class="nav-tooltip">Perfil</span>
         </li>
         <li class="nav-item">
-          <a href="#" class="nav-link">
+          <a href="#" class="nav-link" onclick="cerrarSesion()">
             <span class="nav-icon material-symbols-rounded">logout</span>
             <span class="nav-label">Salir</span>
           </a>
@@ -106,8 +113,8 @@
     </nav>
   </aside>
   <main class="main-content" id="main-content">
-    <!-- Aquí se cargará el dashboard y los módulos -->
-    <div class="container-fluid">
+    <!-- Dashboard ADMIN -->
+    <div class="container-fluid" id="admin-dashboard">
       <h2 class="mb-4 fw-bold"><i class="bi bi-speedometer2 me-2"></i>Dashboard</h2>
       <div class="row g-4 mb-4">
         <div class="col-md-3">
@@ -182,6 +189,74 @@
         </div>
       </div>
     </div>
+    <!-- Dashboard CAJERO -->
+    <div class="container-fluid" id="cajero-dashboard" style="display:none;">
+      <h2 class="mb-4 fw-bold"><i class="bi bi-cash-coin me-2"></i>Resumen Cajero</h2>
+      <div class="row g-4 mb-4">
+        <div class="col-md-4">
+          <div class="card text-center border-0 shadow-sm">
+            <div class="card-body">
+              <h6 class="card-title text-muted">Total Ventas Hoy</h6>
+              <h3 id="cajeroVentasHoy" class="fw-bold text-success">0</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card text-center border-0 shadow-sm">
+            <div class="card-body">
+              <h6 class="card-title text-muted">Ganancias Hoy</h6>
+              <h3 id="cajeroGananciasHoy" class="fw-bold text-primary">$0</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card text-center border-0 shadow-sm">
+            <div class="card-body">
+              <h6 class="card-title text-muted">Productos Bajo Stock</h6>
+              <h3 id="cajeroBajoStock" class="fw-bold text-danger">0</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row g-4 mb-4">
+        <div class="col-lg-6">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body">
+              <h6 class="card-title mb-3"><i class="bi bi-bar-chart-fill me-2"></i>Ventas Últimos 7 Días</h6>
+              <canvas id="cajeroVentasSemanaChart" height="120"></canvas>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body">
+              <h6 class="card-title mb-3"><i class="bi bi-pie-chart-fill me-2"></i>Productos Bajo Stock</h6>
+              <canvas id="cajeroBajoStockChart" height="120"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card border-0 shadow-sm">
+        <div class="card-body">
+          <h6 class="card-title mb-3"><i class="bi bi-clock-history me-2"></i>Últimas 5 Compras</h6>
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Cliente</th>
+                  <th>Total</th>
+                  <th>Fecha</th>
+                </tr>
+              </thead>
+              <tbody id="cajeroUltimasCompras">
+                <!-- Se cargan dinámicamente -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
   </main>
   <footer class="footer mt-5">
     <span>Sistema de Gestión de Tienda &copy; 2025</span>
@@ -191,6 +266,7 @@
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- Script principal -->
+  <script src="/js/auth.js"></script>
   <script src="/js/main.js"></script>
   <script src="/js/navbar.js"></script>
 </body>
