@@ -22,6 +22,7 @@ const rutasAuth = require('./rutas/rutasAuth');
 app.use(express.json());
 app.use(cors());
 app.use(express.static('public'));
+app.use('/pages', express.static('public/pages'));
 
 // Rutas principales
 app.use('/auth', rutasAuth);
@@ -38,6 +39,15 @@ app.use('/puntos-clientes', rutasPuntosCliente);
 // Ruta principal para servir index.html
 app.get('/', (req, res) => {
   res.sendFile(require('path').join(__dirname, '../public/pages/index.html'));
+});
+
+// Ruta para servir cualquier archivo HTML directamente desde /pages
+app.get('/:page', (req, res, next) => {
+  const page = req.params.page;
+  if (page.endsWith('.html')) {
+    return res.sendFile(require('path').join(__dirname, '../public/pages', page));
+  }
+  next();
 });
 
 // Puerto y sincronización de base de datos
