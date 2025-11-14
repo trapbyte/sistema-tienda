@@ -40,14 +40,14 @@
           </a>
           <span class="nav-tooltip">Clientes</span>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" data-admin-only>
           <a href="cajeros.html" class="nav-link" data-module="cajeros">
             <span class="nav-icon material-symbols-rounded">badge</span>
             <span class="nav-label">Cajeros</span>
           </a>
           <span class="nav-tooltip">Cajeros</span>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" data-admin-only>
           <a href="proveedores.html" class="nav-link" data-module="proveedores">
             <span class="nav-icon material-symbols-rounded">local_shipping</span>
             <span class="nav-label">Proveedores</span>
@@ -132,11 +132,17 @@
               <form id="formDetalleCompra" class="row g-3">
                 <div class="col-md-3">
                   <label for="compraId" class="form-label">ID Compra *</label>
-                  <input type="number" id="compraId" class="form-control" required />
+                  <select id="compraId" class="form-select" required>
+                    <option value="">Seleccione una compra</option>
+                    <!-- Opciones dinámicas -->
+                  </select>
                 </div>
                 <div class="col-md-3">
                   <label for="productoId" class="form-label">ID Producto *</label>
-                  <input type="number" id="productoId" class="form-control" required />
+                  <select id="productoId" class="form-select" required>
+                    <option value="">Seleccione un producto</option>
+                    <!-- Opciones dinámicas -->
+                  </select>
                 </div>
                 <div class="col-md-2">
                   <label for="cantidad" class="form-label">Cantidad *</label>
