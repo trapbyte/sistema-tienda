@@ -171,4 +171,11 @@ async function cargarCajerosDropdown() {
 document.addEventListener("DOMContentLoaded", () => {
   cargarCompras();
   cargarCajerosDropdown();
+  
+  // Ocultar tabs de modificar y eliminar para cajeros
+  const auth = verificarAutenticacion();
+  if (auth && auth.perfil === 'cajero') {
+    ocultarTab('modificar-tab');
+    ocultarTab('eliminar-tab');
+  }
 });

@@ -139,4 +139,12 @@ if (buscador) {
 // ========== CARGAR DATOS AL INICIAR ==========
 document.addEventListener("DOMContentLoaded", () => {
   cargarCategorias();
+  
+  // Ocultar tabs para cajeros (SOLO lectura)
+  const auth = verificarAutenticacion();
+  if (auth && auth.perfil === 'cajero') {
+    ocultarTab('registrar-tab');
+    ocultarTab('modificar-tab');
+    ocultarTab('eliminar-tab');
+  }
 });

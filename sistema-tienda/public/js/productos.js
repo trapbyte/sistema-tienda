@@ -254,4 +254,12 @@ if (formEliminarProducto) {
 document.addEventListener("DOMContentLoaded", () => {
   cargarProductos();
   cargarCategoriasDropdown();
+  
+  // Ocultar tabs para cajeros (SOLO lectura)
+  const auth = verificarAutenticacion();
+  if (auth && auth.perfil === 'cajero') {
+    ocultarTab('registrar-tab');
+    ocultarTab('modificar-tab');
+    ocultarTab('eliminar-tab');
+  }
 });
