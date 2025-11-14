@@ -18,17 +18,17 @@ function verificarAutenticacion() {
 function verificarPermisos() {
   const auth = verificarAutenticacion();
   if (!auth) return;
-  
+
   const pagina = window.location.pathname.split('/').pop();
   const perfil = auth.perfil;
-  
+
   // Páginas SOLO para administradores
   const paginasAdmin = [
     'proveedores.html',
-    'cajeros.html',
-    'detalle-compra.html'
+    'cajeros.html'
+    // 'detalle-compra.html' eliminado para permitir acceso a cajero
   ];
-  
+
   // Si es cajero y está en una página restringida, redirigir
   if (perfil === 'cajero' && paginasAdmin.includes(pagina)) {
     alert('❌ No tienes permisos para acceder a esta página');
@@ -47,12 +47,19 @@ function cerrarSesion() {
 // Configurar sidebar según perfil
 function configurarSidebarPorPerfil(perfil) {
   if (perfil === 'cajero') {
-    const elementosOcultar = document.querySelectorAll('[data-admin-only]');
-    elementosOcultar.forEach(el => {
-      el.style.display = 'none';
+    // Oculta solo los enlaces de Cajeros y Proveedores, pero NO Detalle Compra
+    const adminOnlySelectors = [
+      'li.nav-item[data-admin-only] > a[href="cajeros.html"]',
+      'li.nav-item[data-admin-only] > a[href="proveedores.html"]'
+    ];
+    adminOnlySelectors.forEach(selector => {
+      const el = document.querySelector(selector);
+      if (el && el.closest('li')) {
+        el.closest('li').style.display = 'none';
+      }
     });
   }
-  
+
   const perfilElement = document.getElementById('perfilUsuario');
   if (perfilElement) {
     const label = perfilElement.querySelector('.nav-label');
