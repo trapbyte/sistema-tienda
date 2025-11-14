@@ -15,14 +15,78 @@ async function cargarCompras() {
             <td>${c.ide_caj}</td>
             <td>${c.val_tot_fac}</td>
             <td>${c.fec_fac ? new Date(c.fec_fac).toLocaleDateString() : ''}</td>
+            <td>
+              <button class="btn btn-sm btn-outline-primary" onclick="descargarFactura(${c.nro_fac})">
+                <i class="bi bi-download"></i> Factura
+              </button>
+            </td>
           </tr>
         `)
         .join("");
     } else {
-      tabla.innerHTML = '<tr><td colspan="5" class="text-center">No hay compras registradas</td></tr>';
+      tabla.innerHTML = '<tr><td colspan="6" class="text-center">No hay compras registradas</td></tr>';
     }
   } catch (err) {
-    document.getElementById("tablaCompras").innerHTML = '<tr><td colspan="5" class="text-center text-danger">Error al cargar compras</td></tr>';
+    document.getElementById("tablaCompras").innerHTML = '<tr><td colspan="6" class="text-center text-danger">Error al cargar compras</td></tr>';
+  }
+}
+
+// Función para descargar la factura como PDF
+async function descargarFactura(nro_fac) {
+  // Asegúrate de tener jsPDF cargado en tu HTML
+  if (!window.jspdf) {
+    alert("jsPDF no está cargado");
+    return;
+  }
+  try {
+    const res = await fetch(`${API_BASE}/compras/factura/${nro_fac}`);
+    const data = await res.json();
+    if (!data.resultado) {
+      alert("No se pudo obtener la factura");
+      return;
+    }
+    const factura = data.resultado;
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    doc.setFontSize(16);
+    doc.text("Factura de Compra", 14, 15);
+    doc.setFontSize(10);
+    doc.text(`Nro. Factura: ${factura.nro_fac}`, 14, 25);
+    doc.text(`Fecha: ${new Date(factura.fec_fac).toLocaleString()}`, 14, 31);
+    doc.text(`Cliente: ${factura.Cliente?.nom_cli || factura.ide_cli}`, 14, 37);
+    doc.text(`Cédula: ${factura.Cliente?.ide_cli || ''}`, 14, 43);
+    doc.text(`Dirección: ${factura.Cliente?.dir_cli || ''}`, 14, 49);
+    doc.text(`Teléfono: ${factura.Cliente?.tel_cli || ''}`, 14, 55);
+    doc.text(`Cajero: ${factura.Cajero?.nom_caj || factura.ide_caj}`, 14, 61);
+
+    // Tabla de productos
+    doc.setFontSize(12);
+    doc.text("Productos:", 14, 70);
+    doc.setFontSize(10);
+    let y = 76;
+    doc.text("Código", 14, y);
+    doc.text("Nombre", 34, y);
+    doc.text("Cantidad", 84, y);
+    doc.text("Precio Unit.", 114, y);
+    doc.text("Subtotal", 154, y);
+    y += 6;
+    factura.DetalleFacturas.forEach(det => {
+      doc.text(`${det.cod_pro}`, 14, y);
+      doc.text(`${det.Producto?.nom_pro || ''}`, 34, y);
+      doc.text(`${det.cant_pro}`, 84, y);
+      doc.text(`$${parseFloat(det.val_uni_pro).toFixed(2)}`, 114, y);
+      doc.text(`$${parseFloat(det.val_total_pro).toFixed(2)}`, 154, y);
+      y += 6;
+    });
+
+    y += 6;
+    doc.setFontSize(12);
+    doc.text(`Total: $${parseFloat(factura.val_tot_fac).toFixed(2)}`, 14, y);
+
+    doc.save(`Factura_${factura.nro_fac}.pdf`);
+  } catch (err) {
+    alert("Error al descargar la factura");
   }
 }
 
@@ -35,7 +99,6 @@ if (formCompra) {
       nro_fac: document.getElementById("nroFactura").value.trim(),
       ide_cli: document.getElementById("clienteCedula").value.trim(),
       ide_caj: document.getElementById("cajeroId").value.trim(),
-      val_tot_fac: document.getElementById("total").value.trim(),
       fec_fac: document.getElementById("fechaCompra").value,
     };
     try {
@@ -72,7 +135,6 @@ if (formActualizarCompra) {
     const compra = {
       ide_cli: document.getElementById("clienteCedulaActualizar").value.trim(),
       ide_caj: document.getElementById("cajeroIdActualizar").value.trim(),
-      val_tot_fac: document.getElementById("totalActualizar").value.trim(),
       fec_fac: document.getElementById("fechaCompraActualizar").value,
     };
     try {
@@ -167,10 +229,29 @@ async function cargarCajerosDropdown() {
   }
 }
 
+// ========== CARGAR CLIENTES EN EL DROPDOWN ==========
+async function cargarClientesDropdown() {
+  try {
+    const res = await fetch(`${API_BASE}/clientes/listar`);
+    const data = await res.json();
+    const select = document.getElementById("clienteCedula");
+    if (select && data.resultado) {
+      select.innerHTML = '<option value="">Seleccione cliente</option>' +
+        data.resultado.map(cli =>
+          `<option value="${cli.ide_cli}">${cli.ide_cli} - ${cli.nom_cli}</option>`
+        ).join('');
+    }
+  } catch (err) {
+    const select = document.getElementById("clienteCedula");
+    if (select) select.innerHTML = '<option value="">Seleccione cliente</option>';
+  }
+}
+
 // ========== CARGAR DATOS AL INICIAR ==========
 document.addEventListener("DOMContentLoaded", () => {
   cargarCompras();
   cargarCajerosDropdown();
+  cargarClientesDropdown();
   
   // Ocultar tabs de modificar y eliminar para cajeros
   const auth = verificarAutenticacion();

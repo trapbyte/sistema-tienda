@@ -1,5 +1,11 @@
 const { DetalleFactura, Factura, Producto } = require('../baseDatos');
 
+async function actualizarTotalFactura(nro_fac) {
+  const detalles = await DetalleFactura.findAll({ where: { nro_fac } });
+  const total = detalles.reduce((sum, d) => sum + parseFloat(d.val_total_pro), 0);
+  await Factura.update({ val_tot_fac: total }, { where: { nro_fac } });
+}
+
 const registrarDetalleCompra = async (req, res) => {
   try {
     const { cod_pro, nro_fac, val_uni_pro, cant_pro } = req.body;
@@ -15,8 +21,8 @@ const registrarDetalleCompra = async (req, res) => {
       return res.status(404).json({ mensaje: "Producto no encontrado", resultado: null });
     }
 
+    // Una factura puede tener uno o más productos (varios detalles)
     const val_total_pro = cant_pro * val_uni_pro;
-
     const nuevoDetalle = await DetalleFactura.create({
       cod_pro,
       nro_fac,
@@ -24,6 +30,9 @@ const registrarDetalleCompra = async (req, res) => {
       cant_pro,
       val_total_pro
     });
+
+    // Actualizar total de la factura
+    await actualizarTotalFactura(nro_fac);
 
     res.status(201).json({ mensaje: "Detalle de factura registrado", resultado: nuevoDetalle });
   } catch (error) {
@@ -58,6 +67,9 @@ const actualizarDetalleCompra = async (req, res) => {
     const val_total_pro = cant_pro * val_uni_pro;
     await detalle.update({ val_uni_pro, cant_pro, val_total_pro });
 
+    // Actualizar total de la factura
+    await actualizarTotalFactura(detalle.nro_fac);
+
     res.status(200).json({ mensaje: "Detalle de factura actualizado", resultado: detalle });
   } catch (error) {
     res.status(400).json({ mensaje: error.message, resultado: null });
@@ -73,7 +85,12 @@ const eliminarDetalleCompra = async (req, res) => {
       return res.status(404).json({ mensaje: "Detalle de factura no encontrado", resultado: null });
     }
 
+    const nro_fac = detalle.nro_fac;
     await detalle.destroy();
+
+    // Actualizar total de la factura
+    await actualizarTotalFactura(nro_fac);
+
     res.status(200).json({ mensaje: "Detalle de factura eliminado", resultado: null });
   } catch (error) {
     res.status(400).json({ mensaje: error.message, resultado: null });

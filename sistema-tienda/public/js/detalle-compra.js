@@ -1,5 +1,7 @@
 const API_BASE = "http://localhost:3000";
 
+let productosCache = [];
+
 // ========== CARGAR LISTA DE DETALLES ==========
 async function cargarDetallesCompra() {
   try {
@@ -63,7 +65,53 @@ if (formDetalleCompra) {
   });
 }
 
+// ========== CARGAR OPCIONES DE COMPRAS Y PRODUCTOS ==========
+async function cargarOpcionesComprasYProductos() {
+  // Cargar compras
+  try {
+    const resCompras = await fetch(`${API_BASE}/compras/listar`);
+    const dataCompras = await resCompras.json();
+    const selectCompra = document.getElementById("compraId");
+    if (selectCompra && dataCompras.resultado) {
+      selectCompra.innerHTML = '<option value="">Seleccione una compra</option>' +
+        dataCompras.resultado.map(c =>
+          `<option value="${c.nro_fac}">${c.nro_fac} - ${c.ide_cli} - ${new Date(c.fec_fac).toLocaleDateString()}</option>`
+        ).join('');
+    }
+  } catch {}
+
+  // Cargar productos
+  try {
+    const resProductos = await fetch(`${API_BASE}/productos/listar`);
+    const dataProductos = await resProductos.json();
+    const selectProducto = document.getElementById("productoId");
+    if (selectProducto && dataProductos.resultado) {
+      productosCache = dataProductos.resultado; // Guardar productos para uso posterior
+      selectProducto.innerHTML = '<option value="">Seleccione un producto</option>' +
+        dataProductos.resultado.map(p =>
+          `<option value="${p.cod_pro}" data-precio="${p.val_pro}">${p.cod_pro} - ${p.nom_pro}</option>`
+        ).join('');
+    }
+  } catch {}
+}
+
+// ========== PRECIO UNITARIO AUTOMÁTICO ==========
+const selectProducto = document.getElementById("productoId");
+const inputPrecioUnitario = document.getElementById("precio_unitario");
+if (selectProducto && inputPrecioUnitario) {
+  selectProducto.addEventListener("change", function () {
+    const cod_pro = this.value;
+    const producto = productosCache.find(p => p.cod_pro == cod_pro);
+    if (producto) {
+      inputPrecioUnitario.value = producto.val_pro;
+    } else {
+      inputPrecioUnitario.value = "";
+    }
+  });
+}
+
 // ========== CARGAR DATOS AL INICIAR ==========
 document.addEventListener("DOMContentLoaded", () => {
   cargarDetallesCompra();
+  cargarOpcionesComprasYProductos();
 });
