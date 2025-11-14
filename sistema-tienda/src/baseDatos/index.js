@@ -13,6 +13,7 @@ const defineCategoria = require('../modelos/categoria');
 const definePuntosCliente = require('../modelos/puntosCliente');
 const defineDetallePuntos = require('../modelos/detallePuntos');
 const defineProveedorProducto = require('../modelos/proveedorProducto');
+const defineUsuario = require('../modelos/usuario');
 
 // Configuración de conexión
 const sequelize = new Sequelize(
@@ -36,6 +37,7 @@ const Categoria = defineCategoria(sequelize, DataTypes);
 const PuntosCliente = definePuntosCliente(sequelize, DataTypes);
 const DetallePuntos = defineDetallePuntos(sequelize, DataTypes);
 const ProveedorProducto = defineProveedorProducto(sequelize, DataTypes);
+const Usuario = defineUsuario(sequelize, DataTypes);
 
 // Relaciones entre tablas
 
@@ -59,6 +61,18 @@ DetalleFactura.belongsTo(Factura, { foreignKey: 'nro_fac' });
 Producto.hasMany(DetalleFactura, { foreignKey: 'cod_pro' });
 DetalleFactura.belongsTo(Producto, { foreignKey: 'cod_pro' });
 
+// Cliente -> PuntosCliente (1 a 1)
+Cliente.hasOne(PuntosCliente, { foreignKey: 'ide_cli' });
+PuntosCliente.belongsTo(Cliente, { foreignKey: 'ide_cli' });
+
+// Cliente -> DetallePuntos (1 a muchos)
+Cliente.hasMany(DetallePuntos, { foreignKey: 'ide_cli' });
+DetallePuntos.belongsTo(Cliente, { foreignKey: 'ide_cli' });
+
+// Factura -> DetallePuntos (1 a muchos)
+Factura.hasMany(DetallePuntos, { foreignKey: 'nro_fac' });
+DetallePuntos.belongsTo(Factura, { foreignKey: 'nro_fac' });
+
 // Conexión y sincronización
 sequelize.authenticate()
   .then(() => console.log('✅ Conectado a la base de datos.'))
@@ -79,5 +93,6 @@ module.exports = {
   PuntosCliente,
   DetallePuntos,
   ProveedorProducto,
+  Usuario,
   sequelize
 };

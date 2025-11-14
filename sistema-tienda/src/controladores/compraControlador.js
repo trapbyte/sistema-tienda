@@ -1,4 +1,4 @@
-const { Factura, Cliente } = require("../baseDatos");
+const { Factura, Cliente, PuntosCliente, DetallePuntos } = require("../baseDatos");
 
 const registrarCompra = async (req, res) => {
   try {
@@ -9,6 +9,8 @@ const registrarCompra = async (req, res) => {
         .status(404)
         .json({ mensaje: "Cliente no encontrado", resultado: null });
     }
+
+    // Registrar factura
     const nuevaFactura = await Factura.create({
       nro_fac,
       val_tot_fac,
@@ -16,9 +18,43 @@ const registrarCompra = async (req, res) => {
       ide_cli,
       ide_caj,
     });
+
+    // Calcular puntos: 1 punto por cada $1000
+    const puntosGanados = Math.floor(val_tot_fac / 1000);
+
+    if (puntosGanados > 0) {
+      // Buscar o crear registro de puntos del cliente
+      let [puntosCliente, created] = await PuntosCliente.findOrCreate({
+        where: { ide_cli },
+        defaults: {
+          puntos_actual: 0,
+          puntos_totales_obtenidos: 0,
+          puntos_totales_canjeados: 0,
+        },
+      });
+
+      // Actualizar puntos
+      await puntosCliente.update({
+        puntos_actual: puntosCliente.puntos_actual + puntosGanados,
+        puntos_totales_obtenidos:
+          puntosCliente.puntos_totales_obtenidos + puntosGanados,
+        ultima_actualizacion: new Date(),
+      });
+
+      // Registrar detalle de puntos
+      await DetallePuntos.create({
+        ide_cli,
+        nro_fac,
+        tipo_movimiento: "GANANCIA",
+        puntos: puntosGanados,
+        descripcion: `Puntos ganados por compra #${nro_fac} de $${val_tot_fac}`,
+        fecha: new Date(),
+      });
+    }
+
     res
       .status(201)
-      .json({ mensaje: "Factura registrada", resultado: nuevaFactura });
+      .json({ mensaje: "Factura registrada y puntos acreditados", resultado: nuevaFactura });
   } catch (error) {
     res.status(400).json({ mensaje: error.message, resultado: null });
   }

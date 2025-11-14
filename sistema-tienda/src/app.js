@@ -15,6 +15,8 @@ const DetalleCompraRutas = require('./rutas/rutasDetalleCompra');
 const CajeroRutas = require('./rutas/rutasCajero');
 const CategoriaRutas = require('./rutas/rutasCategoria');
 const rutasProveedorProducto = require('./rutas/rutasProveedorProducto');
+const rutasPuntosCliente = require('./rutas/rutasPuntosCliente');
+const rutasAuth = require('./rutas/rutasAuth');
 
 // Middlewares
 app.use(express.json());
@@ -22,6 +24,7 @@ app.use(cors());
 app.use(express.static('public'));
 
 // Rutas principales
+app.use('/auth', rutasAuth);
 app.use('/clientes', ClienteRutas);
 app.use('/compras', CompraRutas);
 app.use('/productos', ProductoRutas);
@@ -30,6 +33,7 @@ app.use('/detalles-compra', DetalleCompraRutas);
 app.use('/cajeros', CajeroRutas);
 app.use('/categorias', CategoriaRutas);
 app.use('/proveedores-productos', rutasProveedorProducto);
+app.use('/puntos-clientes', rutasPuntosCliente);
 
 // Ruta principal para servir index.html
 app.get('/', (req, res) => {
