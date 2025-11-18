@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Factura #{{nro_fac}}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+            color: #2c3e50;
+            font-size: 11pt;
+        }
+
+        .invoice-container {
+            max-width: 210mm;
+            margin: 0 auto;
+            background: white;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .invoice-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px 40px;
+            border-bottom: 4px solid #3498db;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .company-info {
+            flex: 1;
+        }
+
+        .company-name {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        .company-tagline {
+            font-size: 12px;
+            opacity: 0.9;
+            font-style: italic;
+        }
+
+        .invoice-number-box {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 15px 25px;
+            border-radius: 5px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            text-align: right;
+        }
+
+        .invoice-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+
+        .invoice-number {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .invoice-body {
+            padding: 40px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 35px;
+        }
+
+        .info-block {
+            border-left: 3px solid #3498db;
+            padding-left: 20px;
+        }
+
+        .info-block h3 {
+            color: #2c3e50;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .info-block p {
+            margin: 6px 0;
+            color: #555;
+            line-height: 1.5;
+            font-size: 11pt;
+        }
+
+        .info-block strong {
+            color: #2c3e50;
+            font-weight: 600;
+            display: inline-block;
+            min-width: 80px;
+        }
+
+        .date-info {
+            color: #3498db;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        .separator {
+            height: 1px;
+            background: linear-gradient(to right, #3498db, transparent);
+            margin: 30px 0;
+        }
+
+        .items-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 13px;
+            color: #2c3e50;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            font-weight: 600;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #3498db;
+        }
+
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .items-table thead {
+            background: #34495e;
+            color: white;
+        }
+
+        .items-table th {
+            padding: 12px 10px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 10pt;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .items-table th:last-child,
+        .items-table td:last-child {
+            text-align: right;
+        }
+
+        .items-table th:first-child,
+        .items-table td:first-child {
+            text-align: center;
+            width: 40px;
+        }
+
+        .items-table tbody tr {
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .items-table tbody tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .items-table td {
+            padding: 12px 10px;
+            color: #555;
+            font-size: 10pt;
+        }
+
+        .item-number {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .item-name {
+            font-weight: 500;
+            color: #2c3e50;
+        }
+
+        .item-price {
+            color: #27ae60;
+            font-weight: 600;
+        }
+
+        .totals-section {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 30px;
+        }
+
+        .totals-box {
+            min-width: 320px;
+            background: #f8f9fa;
+            border: 2px solid #e1e8ed;
+            border-radius: 5px;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 20px;
+            font-size: 11pt;
+        }
+
+        .total-row.subtotal {
+            border-bottom: 1px solid #e1e8ed;
+            color: #555;
+        }
+
+        .total-row.final {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            font-size: 16pt;
+            font-weight: bold;
+            border-radius: 0 0 3px 3px;
+            padding: 18px 20px;
+        }
+
+        .total-label {
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 10pt;
+        }
+
+        .total-row.final .total-label {
+            font-size: 12pt;
+        }
+
+        .total-value {
+            font-weight: 600;
+        }
+
+        .invoice-footer {
+            background: #f8f9fa;
+            padding: 25px 40px;
+            border-top: 3px solid #3498db;
+            margin-top: 30px;
+        }
+
+        .footer-content {
+            text-align: center;
+        }
+
+        .footer-title {
+            color: #2c3e50;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .footer-text {
+            color: #666;
+            font-size: 10pt;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .footer-contact {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+            color: #555;
+            font-size: 9pt;
+        }
+
+        .footer-divider {
+            margin: 0 10px;
+            color: #3498db;
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice-container">
+        <!-- Header -->
+        <div class="invoice-header">
+            <div class="header-top">
+                <div class="company-info">
+                    <div class="company-name">SISTEMA TIENDA</div>
+                    <div class="company-tagline">Soluciones Comerciales Integrales</div>
+                </div>
+                <div class="invoice-number-box">
+                    <div class="invoice-label">Factura N°</div>
+                    <div class="invoice-number">{{nro_fac}}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Body -->
+        <div class="invoice-body">
+            <!-- Info Section -->
+            <div class="info-grid">
+                <div class="info-block">
+                    <h3>Información del Cliente</h3>
+                    <p><strong>Cliente:</strong> {{cliente}}</p>
+                    <p><strong>Teléfono:</strong> {{telefono}}</p>
+                    <p><strong>Dirección:</strong> {{direccion}}</p>
+                </div>
+                
+                <div class="info-block">
+                    <h3>Información de la Transacción</h3>
+                    <p><strong>Cajero:</strong> {{cajero}}</p>
+                    <p class="date-info"><strong>Fecha:</strong> {{fecha}}</p>
+                </div>
+            </div>
+
+            <div class="separator"></div>
+
+            <!-- Items Section -->
+            <div class="items-section">
+                <div class="section-title">Detalle de Productos</div>
+                
+                <table class="items-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Descripción</th>
+                            <th>Cantidad</th>
+                            <th>Precio Unit.</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{detalles}}
+                    </tbody>
+                </table>
+
+                <!-- Totals Section -->
+                <div class="totals-section">
+                    <div class="totals-box">
+                        <div class="total-row final">
+                            <span class="total-label">Total a Pagar:</span>
+                            <span class="total-value">${{total_factura}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="invoice-footer">
+            <div class="footer-content">
+                <div class="footer-title">Gracias por su compra</div>
+                <div class="footer-text">
+                    Este documento es un comprobante válido de su transacción. Conserve para reclamos o devoluciones.
+                </div>
+                <div class="footer-contact">
+                    contacto@sistematienda.com
+                    <span class="footer-divider">•</span>
+                    Tel: +123 456 7890
+                    <span class="footer-divider">•</span>
+                    www.sistematienda.com
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
