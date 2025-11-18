@@ -33,59 +33,34 @@ async function cargarCompras() {
 
 // Función para descargar la factura como PDF
 async function descargarFactura(nro_fac) {
-  // Asegúrate de tener jsPDF cargado en tu HTML
-  if (!window.jspdf) {
-    alert("jsPDF no está cargado");
-    return;
-  }
   try {
-    const res = await fetch(`${API_BASE}/compras/factura/${nro_fac}`);
-    const data = await res.json();
-    if (!data.resultado) {
-      alert("No se pudo obtener la factura");
-      return;
-    }
-    const factura = data.resultado;
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF();
-
-    doc.setFontSize(16);
-    doc.text("Factura de Compra", 14, 15);
-    doc.setFontSize(10);
-    doc.text(`Nro. Factura: ${factura.nro_fac}`, 14, 25);
-    doc.text(`Fecha: ${new Date(factura.fec_fac).toLocaleString()}`, 14, 31);
-    doc.text(`Cliente: ${factura.Cliente?.nom_cli || factura.ide_cli}`, 14, 37);
-    doc.text(`Cédula: ${factura.Cliente?.ide_cli || ''}`, 14, 43);
-    doc.text(`Dirección: ${factura.Cliente?.dir_cli || ''}`, 14, 49);
-    doc.text(`Teléfono: ${factura.Cliente?.tel_cli || ''}`, 14, 55);
-    doc.text(`Cajero: ${factura.Cajero?.nom_caj || factura.ide_caj}`, 14, 61);
-
-    // Tabla de productos
-    doc.setFontSize(12);
-    doc.text("Productos:", 14, 70);
-    doc.setFontSize(10);
-    let y = 76;
-    doc.text("Código", 14, y);
-    doc.text("Nombre", 34, y);
-    doc.text("Cantidad", 84, y);
-    doc.text("Precio Unit.", 114, y);
-    doc.text("Subtotal", 154, y);
-    y += 6;
-    factura.DetalleFacturas.forEach(det => {
-      doc.text(`${det.cod_pro}`, 14, y);
-      doc.text(`${det.Producto?.nom_pro || ''}`, 34, y);
-      doc.text(`${det.cant_pro}`, 84, y);
-      doc.text(`$${parseFloat(det.val_uni_pro).toFixed(2)}`, 114, y);
-      doc.text(`$${parseFloat(det.val_total_pro).toFixed(2)}`, 154, y);
-      y += 6;
-    });
-
-    y += 6;
-    doc.setFontSize(12);
-    doc.text(`Total: $${parseFloat(factura.val_tot_fac).toFixed(2)}`, 14, y);
-
-    doc.save(`Factura_${factura.nro_fac}.pdf`);
+    // Usar el endpoint del backend que genera un PDF hermoso con Puppeteer
+    const url = `${API_BASE}/compras/descargar-factura/${nro_fac}`;
+    
+    // Crear un enlace temporal para descargar el archivo
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `factura_${nro_fac}.pdf`;
+    link.target = '_blank';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    // Alternativa: usando fetch si quieres mostrar un mensaje de espera
+    // const res = await fetch(url);
+    // if (!res.ok) throw new Error('Error al generar PDF');
+    // const blob = await res.blob();
+    // const downloadUrl = window.URL.createObjectURL(blob);
+    // const a = document.createElement('a');
+    // a.href = downloadUrl;
+    // a.download = `factura_${nro_fac}.pdf`;
+    // document.body.appendChild(a);
+    // a.click();
+    // window.URL.revokeObjectURL(downloadUrl);
+    // document.body.removeChild(a);
+    
   } catch (err) {
+    console.error('Error al descargar la factura:', err);
     alert("Error al descargar la factura");
   }
 }

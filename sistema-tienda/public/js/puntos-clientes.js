@@ -6,15 +6,18 @@ async function cargarPuntosClientes() {
     const data = await res.json();
     const tabla = document.getElementById("tablaPuntosClientes");
     if (data.resultado && data.resultado.length > 0) {
-      tabla.innerHTML = data.resultado.map(p => `
-        <tr>
-          <td>${p.Cliente?.nom_cli || p.ide_cli}</td>
-          <td><span class="badge bg-success">${p.puntos_actual}</span></td>
-          <td>${p.puntos_totales_obtenidos}</td>
-          <td>${p.puntos_totales_canjeados}</td>
-          <td>${new Date(p.ultima_actualizacion).toLocaleString()}</td>
-        </tr>
-      `).join('');
+      tabla.innerHTML = data.resultado.map(p => {
+        const cliente = p.Cliente || p.cliente || {};
+        return `
+          <tr>
+            <td>${cliente.nom_cli || p.ide_cli}</td>
+            <td><span class="badge bg-success">${p.puntos_actual}</span></td>
+            <td>${p.puntos_totales_obtenidos}</td>
+            <td>${p.puntos_totales_canjeados}</td>
+            <td>${new Date(p.ultima_actualizacion).toLocaleString()}</td>
+          </tr>
+        `;
+      }).join('');
     } else {
       tabla.innerHTML = '<tr><td colspan="5" class="text-center">No hay puntos registrados</td></tr>';
     }
@@ -29,15 +32,18 @@ async function cargarDetallePuntos() {
     const data = await res.json();
     const tabla = document.getElementById("tablaDetallePuntos");
     if (data.resultado && data.resultado.length > 0) {
-      tabla.innerHTML = data.resultado.map(d => `
-        <tr>
-          <td>${d.Cliente?.nom_cli || d.ide_cli}</td>
-          <td><span class="badge ${d.tipo_movimiento === 'GANANCIA' ? 'bg-success' : 'bg-danger'}">${d.tipo_movimiento}</span></td>
-          <td>${d.puntos}</td>
-          <td>${d.descripcion || ''}</td>
-          <td>${new Date(d.fecha).toLocaleString()}</td>
-        </tr>
-      `).join('');
+      tabla.innerHTML = data.resultado.map(d => {
+        const cliente = d.Cliente || d.cliente || {};
+        return `
+          <tr>
+            <td>${cliente.nom_cli || d.ide_cli}</td>
+            <td><span class="badge ${d.tipo_movimiento === 'GANANCIA' ? 'bg-success' : 'bg-danger'}">${d.tipo_movimiento}</span></td>
+            <td>${d.puntos}</td>
+            <td>${d.descripcion || ''}</td>
+            <td>${new Date(d.fecha).toLocaleString()}</td>
+          </tr>
+        `;
+      }).join('');
     } else {
       tabla.innerHTML = '<tr><td colspan="5" class="text-center">No hay movimientos registrados</td></tr>';
     }
