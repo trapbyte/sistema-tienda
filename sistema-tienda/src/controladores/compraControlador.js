@@ -126,7 +126,7 @@ const obtenerFacturaDetallada = async (req, res) => {
         {
           model: DetalleFactura,
           include: [
-            { model: Producto, attributes: ['cod_pro', 'nom_pro'] }
+            { model: Producto, attributes: ['cod_pro', 'nom_pro', 'val_pro'] }
           ]
         }
       ]
@@ -136,6 +136,7 @@ const obtenerFacturaDetallada = async (req, res) => {
     }
     res.status(200).json({ mensaje: "Factura detallada", resultado: factura });
   } catch (error) {
+    console.error("Error en obtenerFacturaDetallada:", error);
     res.status(400).json({ mensaje: error.message, resultado: null });
   }
 };
@@ -149,7 +150,7 @@ const obtenerCompraPorId = async (req, res) => {
         { model: Cajero, attributes: ['ide_caj', 'nom_caj'] },
         { 
           model: DetalleFactura, 
-          include: [{ model: Producto, attributes: ['nom_pro', 'pre_pro'] }]
+          include: [{ model: Producto, attributes: ['nom_pro', 'val_pro'] }]
         }
       ]
     });
@@ -162,10 +163,33 @@ const obtenerCompraPorId = async (req, res) => {
   }
 };
 
+const obtenerFacturaDetalladaRaw = async (nro_fac) => {
+  try {
+    const factura = await Factura.findByPk(nro_fac, {
+      include: [
+        { model: Cliente, attributes: ['ide_cli', 'nom_cli', 'dir_cli', 'tel_cli'] },
+        { model: Cajero, attributes: ['ide_caj', 'nom_caj'] },
+        {
+          model: DetalleFactura,
+          include: [
+            { model: Producto, attributes: ['cod_pro', 'nom_pro', 'val_pro'] }
+          ]
+        }
+      ]
+    });
+    return factura;
+  } catch (error) {
+    console.error("Error en obtenerFacturaDetalladaRaw:", error);
+    return null;
+  }
+};
+
 module.exports = {
   listarCompras,
   registrarCompra,
   obtenerCompraPorId,
   actualizarCompra,
-  eliminarCompra: borrarCompra
+  eliminarCompra: borrarCompra,
+  obtenerFacturaDetallada,
+  obtenerFacturaDetalladaRaw,
 };

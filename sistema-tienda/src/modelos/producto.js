@@ -18,7 +18,7 @@ const defineProducto = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: 0
     },
-    val_pro: {
+    val_pro: { // Este es el campo de valor/precio del producto
       type: DataTypes.DECIMAL(12, 2),
       allowNull: false
     },

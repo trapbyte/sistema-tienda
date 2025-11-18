@@ -65,7 +65,6 @@ DetalleFactura.belongsTo(Producto, { foreignKey: 'cod_pro' });
 Cliente.hasOne(PuntosCliente, { foreignKey: 'ide_cli' });
 PuntosCliente.belongsTo(Cliente, { foreignKey: 'ide_cli', as: 'Cliente' });
 
-// Cliente -> DetallePuntos (1 a muchos)
 Cliente.hasMany(DetallePuntos, { foreignKey: 'ide_cli' });
 DetallePuntos.belongsTo(Cliente, { foreignKey: 'ide_cli', as: 'Cliente' });
 
