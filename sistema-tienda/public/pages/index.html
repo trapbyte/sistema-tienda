@@ -13,13 +13,15 @@
   <!-- Estilos personalizados -->
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="/css/navbar.css">
+  <!-- Usa un favicon de alta resolución y como apple-touch-icon para que se vea grande en accesos directos y pestañas compatibles -->
+  <link rel="icon" type="image/x-icon" href="../images/logo2.ico">
 </head>
 <body>
   <aside class="sidebar">
     <header class="sidebar-header">
       <a href="#" class="header-logo">
         <!-- Puedes poner tu logo aquí -->
-        <img src="../images/logo.png" alt="Logo">
+        <img src="../images/logo2.ico" alt="Logo">
       </a>
       <button class="toggler sidebar-toggler">
         <span class="material-symbols-rounded">chevron_left</span>
@@ -115,13 +117,23 @@
   <main class="main-content" id="main-content">
     <!-- Dashboard ADMIN -->
     <div class="container-fluid" id="admin-dashboard">
-      <h2 class="mb-4 fw-bold"><i class="bi bi-speedometer2 me-2"></i>Dashboard</h2>
+      <h2 class="mb-4 fw-bold"><i class="bi bi-speedometer2 me-2"></i>Dashboard Administrador</h2>
+      
+      <!-- Métricas principales -->
       <div class="row g-4 mb-4">
         <div class="col-md-3">
           <div class="card text-center border-0 shadow-sm">
             <div class="card-body">
-              <h6 class="card-title text-muted">Total Clientes</h6>
-              <h3 id="totalClientes" class="fw-bold text-primary">0</h3>
+              <h6 class="card-title text-muted">Ventas del Mes</h6>
+              <h3 id="ventasMes" class="fw-bold text-primary">0</h3>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="card text-center border-0 shadow-sm">
+            <div class="card-body">
+              <h6 class="card-title text-muted">Ingresos del Mes</h6>
+              <h3 id="ingresosMes" class="fw-bold text-success">$0</h3>
             </div>
           </div>
         </div>
@@ -129,136 +141,217 @@
           <div class="card text-center border-0 shadow-sm">
             <div class="card-body">
               <h6 class="card-title text-muted">Total Productos</h6>
-              <h3 id="totalProductos" class="fw-bold text-success">0</h3>
+              <h3 id="totalProductos" class="fw-bold text-info">0</h3>
             </div>
           </div>
         </div>
         <div class="col-md-3">
-          <div class="card text-center border-0 shadow-sm">
+          <div class="card text-center border-0 shadow-sm bg-danger bg-opacity-10">
             <div class="card-body">
-              <h6 class="card-title text-muted">Total Compras</h6>
-              <h3 id="totalCompras" class="fw-bold text-warning">0</h3>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-3">
-          <div class="card text-center border-0 shadow-sm">
-            <div class="card-body">
-              <h6 class="card-title text-muted">Total Proveedores</h6>
-              <h3 id="totalProveedores" class="fw-bold text-info">0</h3>
+              <h6 class="card-title text-muted">Stock Bajo (≤10)</h6>
+              <h3 id="productosStockBajo" class="fw-bold text-danger">0</h3>
             </div>
           </div>
         </div>
       </div>
+
+      <!-- Gráficos y análisis -->
       <div class="row g-4 mb-4">
-        <div class="col-lg-8">
+        <div class="col-lg-7">
           <div class="card border-0 shadow-sm">
             <div class="card-body">
-              <h6 class="card-title mb-3"><i class="bi bi-bar-chart-fill me-2"></i>Ventas Mensuales</h6>
-              <canvas id="ventasMensualesChart" height="120"></canvas>
+              <h6 class="card-title mb-3"><i class="bi bi-bar-chart-line-fill me-2"></i>Ventas Últimos 7 Días</h6>
+              <canvas id="adminVentas7DiasChart" height="207"></canvas>
             </div>
           </div>
         </div>
-        <div class="col-lg-4">
+        <div class="col-lg-5">
           <div class="card border-0 shadow-sm">
             <div class="card-body">
               <h6 class="card-title mb-3"><i class="bi bi-pie-chart-fill me-2"></i>Productos por Categoría</h6>
-              <canvas id="productosCategoriaChart" height="180"></canvas>
+              <canvas id="adminProductosCategoriaChart" height="200"></canvas>
             </div>
           </div>
         </div>
       </div>
-      <div class="card border-0 shadow-sm">
-        <div class="card-body">
-          <h6 class="card-title mb-3"><i class="bi bi-clock-history me-2"></i>Actividad Reciente (Últimas 5 Compras)</h6>
-          <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Cliente</th>
-                  <th>Total</th>
-                  <th>Fecha</th>
-                </tr>
-              </thead>
-              <tbody id="tablaUltimasCompras">
-                <!-- Se cargan dinámicamente -->
-              </tbody>
-            </table>
+
+      <!-- Productos con Stock Bajo y Top Productos -->
+      <div class="row g-4 mb-4">
+        <div class="col-lg-6">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body d-flex flex-column">
+              <h6 class="card-title mb-3"><i class="bi bi-exclamation-triangle-fill text-danger me-2"></i>Productos con Stock Bajo (≤10 unidades)</h6>
+              <div class="table-responsive flex-grow-1" style="max-height: 350px; overflow-y: auto;">
+                <table class="table table-hover align-middle mb-0 table-sm">
+                  <thead class="sticky-top bg-white">
+                    <tr>
+                      <th>Código</th>
+                      <th>Producto</th>
+                      <th>Stock</th>
+                      <th>Categoría</th>
+                      <th>Precio</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tablaStockBajo">
+                    <tr><td colspan="5" class="text-center text-muted">Cargando...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="card border-0 shadow-sm h-100">
+            <div class="card-body">
+              <h6 class="card-title mb-3"><i class="bi bi-trophy-fill text-warning me-2"></i>Top 5 Productos Más Vendidos</h6>
+              <canvas id="adminTopProductosChart" height="280"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top 10 Productos Menos Vendidos -->
+      <div class="row g-4 mb-4">
+        <div class="col-12">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body">
+              <h6 class="card-title mb-3"><i class="bi bi-arrow-down-circle-fill text-info me-2"></i>Top 10 Productos Menos Vendidos</h6>
+              <div id="menosVendidosContainer">
+                <canvas id="adminProductosMenosVendidosChart" height="100"></canvas>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Últimas compras -->
+      <div class="row g-4">
+        <div class="col-12">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body">
+              <h6 class="card-title mb-3"><i class="bi bi-clock-history me-2"></i>Últimas 5 Compras</h6>
+              <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th>Factura</th>
+                      <th>Cliente</th>
+                      <th>Total</th>
+                      <th>Fecha</th>
+                    </tr>
+                  </thead>
+                  <tbody id="tablaUltimasCompras">
+                    <tr><td colspan="4" class="text-center text-muted">Cargando...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
     <!-- Dashboard CAJERO -->
     <div class="container-fluid" id="cajero-dashboard" style="display:none;">
-      <h2 class="mb-4 fw-bold"><i class="bi bi-cash-coin me-2"></i>Resumen Cajero</h2>
+      <h2 class="mb-4 fw-bold"><i class="bi bi-cash-coin me-2"></i>Dashboard Cajero</h2>
+      
+      <!-- Métricas del día -->
       <div class="row g-4 mb-4">
         <div class="col-md-4">
           <div class="card text-center border-0 shadow-sm">
             <div class="card-body">
-              <h6 class="card-title text-muted">Total Ventas Hoy</h6>
-              <h3 id="cajeroVentasHoy" class="fw-bold text-success">0</h3>
+              <h6 class="card-title text-muted">Ventas Hoy</h6>
+              <h3 id="cajeroVentasHoy" class="fw-bold text-primary">0</h3>
             </div>
           </div>
         </div>
         <div class="col-md-4">
           <div class="card text-center border-0 shadow-sm">
             <div class="card-body">
-              <h6 class="card-title text-muted">Ganancias Hoy</h6>
-              <h3 id="cajeroGananciasHoy" class="fw-bold text-primary">$0</h3>
+              <h6 class="card-title text-muted">Ingresos Hoy</h6>
+              <h3 id="cajeroGananciasHoy" class="fw-bold text-success">$0</h3>
             </div>
           </div>
         </div>
         <div class="col-md-4">
-          <div class="card text-center border-0 shadow-sm">
+          <div class="card text-center border-0 shadow-sm bg-danger bg-opacity-10">
             <div class="card-body">
-              <h6 class="card-title text-muted">Productos Bajo Stock</h6>
+              <h6 class="card-title text-muted">Stock Bajo (≤10)</h6>
               <h3 id="cajeroBajoStock" class="fw-bold text-danger">0</h3>
             </div>
           </div>
         </div>
       </div>
+
+      <!-- Gráficos -->
       <div class="row g-4 mb-4">
-        <div class="col-lg-6">
+        <div class="col-lg-8">
           <div class="card border-0 shadow-sm">
             <div class="card-body">
-              <h6 class="card-title mb-3"><i class="bi bi-bar-chart-fill me-2"></i>Ventas Últimos 7 Días</h6>
-              <canvas id="cajeroVentasSemanaChart" height="120"></canvas>
+              <h6 class="card-title mb-3"><i class="bi bi-graph-up me-2"></i>Ventas de Hoy por Hora</h6>
+              <canvas id="cajeroVentasHoyChart" height="93"></canvas>
             </div>
           </div>
         </div>
-        <div class="col-lg-6">
+        <div class="col-lg-4">
           <div class="card border-0 shadow-sm">
             <div class="card-body">
-              <h6 class="card-title mb-3"><i class="bi bi-pie-chart-fill me-2"></i>Productos Bajo Stock</h6>
-              <canvas id="cajeroBajoStockChart" height="120"></canvas>
+              <h6 class="card-title mb-3"><i class="bi bi-trophy-fill text-warning me-2"></i>Top 5 Productos Hoy</h6>
+              <canvas id="cajeroTopProductosChart" height="200"></canvas>
             </div>
           </div>
         </div>
       </div>
-      <div class="card border-0 shadow-sm">
-        <div class="card-body">
-          <h6 class="card-title mb-3"><i class="bi bi-clock-history me-2"></i>Últimas 5 Compras</h6>
-          <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Cliente</th>
-                  <th>Total</th>
-                  <th>Fecha</th>
-                </tr>
-              </thead>
-              <tbody id="cajeroUltimasCompras">
-                <!-- Se cargan dinámicamente -->
-              </tbody>
-            </table>
+
+      <!-- Productos con Stock Bajo y Últimas ventas -->
+      <div class="row g-4">
+        <div class="col-lg-6">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body">
+              <h6 class="card-title mb-3"><i class="bi bi-exclamation-triangle-fill text-danger me-2"></i>Productos con Stock Bajo (≤10 unidades)</h6>
+              <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+                <table class="table table-hover align-middle mb-0 table-sm">
+                  <thead class="sticky-top bg-white">
+                    <tr>
+                      <th>Código</th>
+                      <th>Producto</th>
+                      <th>Stock</th>
+                      <th>Precio</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cajeroTablaStockBajo">
+                    <tr><td colspan="4" class="text-center text-muted">Cargando...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <div class="card border-0 shadow-sm">
+            <div class="card-body">
+              <h6 class="card-title mb-3"><i class="bi bi-clock-history me-2"></i>Últimas 5 Ventas</h6>
+              <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0 table-sm">
+                  <thead>
+                    <tr>
+                      <th>Factura</th>
+                      <th>Cliente</th>
+                      <th>Total</th>
+                      <th>Fecha</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cajeroUltimasCompras">
+                    <tr><td colspan="4" class="text-center text-muted">Cargando...</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </main>
-  <footer class="footer mt-5">
+  <footer class="footer mt-0">
     <span>Sistema de Gestión de Tienda &copy; 2025</span>
   </footer>
   <!-- Bootstrap Bundle con Popper -->

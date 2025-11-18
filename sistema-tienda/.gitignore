@@ -27,3 +27,5 @@ build/
 *.bak
 # No subir archivos de datos sensibles
 src/scripts/crearAdmin.js
+# Documentación
+docs/
