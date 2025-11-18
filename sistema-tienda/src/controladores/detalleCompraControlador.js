@@ -21,6 +21,14 @@ const registrarDetalleCompra = async (req, res) => {
       return res.status(404).json({ mensaje: "Producto no encontrado", resultado: null });
     }
 
+    // VALIDAR STOCK DISPONIBLE
+    if (producto.cant_pro < cant_pro) {
+      return res.status(400).json({ 
+        mensaje: `Stock insuficiente. Disponible: ${producto.cant_pro}, Solicitado: ${cant_pro}`, 
+        resultado: null 
+      });
+    }
+
     // Una factura puede tener uno o más productos (varios detalles)
     const val_total_pro = cant_pro * val_uni_pro;
     const nuevoDetalle = await DetalleFactura.create({
@@ -31,10 +39,15 @@ const registrarDetalleCompra = async (req, res) => {
       val_total_pro
     });
 
+    // DISMINUIR EL STOCK DEL PRODUCTO
+    await producto.update({ 
+      cant_pro: producto.cant_pro - cant_pro 
+    });
+
     // Actualizar total de la factura
     await actualizarTotalFactura(nro_fac);
 
-    res.status(201).json({ mensaje: "Detalle de factura registrado", resultado: nuevoDetalle });
+    res.status(201).json({ mensaje: "Detalle de factura registrado y stock actualizado", resultado: nuevoDetalle });
   } catch (error) {
     res.status(400).json({ mensaje: error.message, resultado: null });
   }

@@ -34,10 +34,27 @@ const formDetalleCompra = document.getElementById("formDetalleCompra");
 if (formDetalleCompra) {
   formDetalleCompra.addEventListener("submit", async (e) => {
     e.preventDefault();
+    const cod_pro = document.getElementById("productoId").value.trim();
+    const cant_pro = parseInt(document.getElementById("cantidad").value.trim());
+    
+    // VALIDAR STOCK ANTES DE ENVIAR
+    const producto = productosCache.find(p => p.cod_pro == cod_pro);
+    if (producto) {
+      if (producto.cant_pro < cant_pro) {
+        alert(`❌ Stock insuficiente!\nDisponible: ${producto.cant_pro}\nSolicitado: ${cant_pro}`);
+        return;
+      }
+      if (producto.cant_pro <= 10) {
+        if (!confirm(`⚠️ ADVERTENCIA: Este producto tiene stock bajo (${producto.cant_pro} unidades).\n¿Desea continuar?`)) {
+          return;
+        }
+      }
+    }
+    
     const detalle = {
       nro_fac: document.getElementById("compraId").value.trim(),
-      cod_pro: document.getElementById("productoId").value.trim(),
-      cant_pro: document.getElementById("cantidad").value.trim(),
+      cod_pro: cod_pro,
+      cant_pro: cant_pro,
       val_uni_pro: document.getElementById("precio_unitario").value.trim(),
     };
     try {
@@ -48,9 +65,11 @@ if (formDetalleCompra) {
       });
       const data = await res.json();
       if (data.resultado) {
-        alert("✅ Detalle registrado correctamente");
+        alert("✅ Detalle registrado correctamente - Stock actualizado");
         formDetalleCompra.reset();
         cargarDetallesCompra();
+        // Recargar productos para actualizar el cache de stock
+        await cargarOpcionesComprasYProductos();
         const listarTab = document.getElementById("listar-tab");
         if (listarTab) {
           const tab = new bootstrap.Tab(listarTab);
@@ -95,17 +114,31 @@ async function cargarOpcionesComprasYProductos() {
   } catch {}
 }
 
-// ========== PRECIO UNITARIO AUTOMÁTICO ==========
+// ========== PRECIO UNITARIO AUTOMÁTICO Y MOSTRAR STOCK ==========
 const selectProducto = document.getElementById("productoId");
 const inputPrecioUnitario = document.getElementById("precio_unitario");
+const inputCantidad = document.getElementById("cantidad");
 if (selectProducto && inputPrecioUnitario) {
   selectProducto.addEventListener("change", function () {
     const cod_pro = this.value;
     const producto = productosCache.find(p => p.cod_pro == cod_pro);
     if (producto) {
       inputPrecioUnitario.value = producto.val_pro;
+      // Mostrar stock disponible
+      let stockInfo = document.getElementById("stockInfo");
+      if (!stockInfo) {
+        stockInfo = document.createElement("small");
+        stockInfo.id = "stockInfo";
+        stockInfo.className = "form-text";
+        inputCantidad.parentElement.appendChild(stockInfo);
+      }
+      const stockClass = producto.cant_pro <= 10 ? "text-danger fw-bold" : "text-muted";
+      stockInfo.innerHTML = `<span class="${stockClass}">Stock disponible: ${producto.cant_pro} unidades</span>`;
+      inputCantidad.max = producto.cant_pro;
     } else {
       inputPrecioUnitario.value = "";
+      const stockInfo = document.getElementById("stockInfo");
+      if (stockInfo) stockInfo.innerHTML = "";
     }
   });
 }
