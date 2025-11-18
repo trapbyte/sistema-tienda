@@ -7,7 +7,7 @@ body {
 }
 
 header, .navbar, .footer {
-  background-color: #1574c0;
+  background-color: #232a4d;
   color: white;
   text-align: center;
   padding: 1rem;
@@ -82,11 +82,14 @@ form button:hover {
   border-radius: 12px;
 }
 
-.card, .form-control, .btn, .table, .navbar, .footer {
+.footer{
+  border-radius: 0 !important;
+}
+.card, .form-control, .btn, .table, .navbar{
   border-radius: 12px !important;
 }
 .card, .navbar, .footer {
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 .btn, .nav-link, .form-control {
   transition: all 0.3s ease-in-out;
@@ -100,7 +103,7 @@ form button:hover {
   color: #f6f8fc !important;
 }
 .footer {
-  background: #1574c0;
+  background: #151a2d;
   color: #fff;
   text-align: center;
   padding: 1rem 0;

@@ -48,6 +48,8 @@ body {
   display: block;
   object-fit: contain;
   border-radius: 50%;
+  margin-top: 30px; /* Deja el margin-top para mantener el logo abajo */
+  margin-bottom: 0;  /* Elimina cualquier separación extra debajo */
 }
 .sidebar-header .toggler {
   height: 30px;
@@ -65,16 +67,16 @@ body {
 .sidebar-header .sidebar-toggler {
   position: absolute;
   right: 20px;
-  top: 20px; /* Arriba cuando expandida */
+  top: 20px;
 }
 .sidebar.collapsed .sidebar-header .sidebar-toggler {
-  top: 100px; /* Más abajo cuando colapsada */
+  top: 20px; /* Antes: 100px */
 }
 .sidebar-header .menu-toggler {
   display: none;
 }
 .sidebar.collapsed .sidebar-header .toggler {
-  transform: translate(-4px, 65px);
+  transform: translate(-4px, 0); /* Antes: 5px */
 }
 .sidebar-header .toggler:hover {
   background: #dde4fb;
@@ -89,14 +91,15 @@ body {
 .sidebar-nav .nav-list {
   list-style: none;
   display: flex;
-  gap: 4px;
+  gap: 7px;
   padding: 0 15px;
   flex-direction: column;
-  transform: translateY(15px);
+  transform: translateY(0); /* Antes: 15px. Más cerca del logo */
   transition: 0.4s ease;
+  margin-top: -40px; /* Acerca los elementos al logo sin mover el logo */
 }
 .sidebar.collapsed .sidebar-nav .primary-nav {
-  transform: translateY(65px);
+  transform: translateY(30px); /* Antes: 65px. Subido para evitar superposición */
 }
 .sidebar-nav .nav-link {
   color: #fff;
@@ -104,7 +107,7 @@ body {
   gap: 12px;
   white-space: nowrap;
   border-radius: 8px;
-  padding: 12px 15px;
+  padding: 8px 15px; /* Menos padding vertical para compactar */
   align-items: center;
   text-decoration: none;
   transition: 0.4s ease;
@@ -125,10 +128,11 @@ body {
 }
 .sidebar-nav .nav-item {
   position: relative;
+  margin-bottom: 0; /* Sin margen extra */
 }
 .sidebar-nav .nav-tooltip {
   position: absolute;
-  top: -10px;
+  top: -20px; /* Antes: -10px. Subido para mejor alineación */
   opacity: 0;
   color: #151A2D;
   display: none;
@@ -157,7 +161,7 @@ body {
 }
 .nav-item.dropdown {
   position: relative;
-  margin-bottom: 8px;
+  margin-bottom: 4px; /* Solo un poco de espacio debajo de dropdown */
 }
 
 .nav-item.dropdown .dropdown-menu {
