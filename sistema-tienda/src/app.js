@@ -4,6 +4,18 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 
+// Configuración de CORS
+const corsOptions = {
+  origin: [
+    'http://localhost:3000', // desarrollo local
+    'https://sistema-tienda-c3xf.onrender.com', // reemplaza por tu dominio real en producción
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+};
+app.use(cors(corsOptions));
+
 const { sequelize } = require('./baseDatos');
 
 // Importar rutas
@@ -20,7 +32,6 @@ const rutasAuth = require('./rutas/rutasAuth');
 
 // Middlewares
 app.use(express.json());
-app.use(cors());
 app.use(express.static('public'));
 app.use('/pages', express.static('public/pages'));
 
