@@ -7,7 +7,7 @@ const cors = require('cors');
 // Configuración de CORS
 const corsOptions = {
   origin: [
-    'http://localhost:3000', // desarrollo local
+    'https://sistema-tienda.onrender.com', // cambiado desde 'http://localhost:3000'
     'https://sistema-tienda-c3xf.onrender.com', // reemplaza por tu dominio real en producción
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],

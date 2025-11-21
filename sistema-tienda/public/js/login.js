@@ -1,4 +1,5 @@
-const API_BASE = "http://localhost:3000";
+window.API_BASE = window.API_BASE || "https://sistema-tienda.onrender.com";
+//window.API_BASE = window.API_BASE || "http://localhost:3000";
 const loginForm = document.getElementById('loginForm');
 
 loginForm.addEventListener('submit', async (e) => {

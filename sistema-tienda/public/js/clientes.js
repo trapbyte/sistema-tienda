@@ -1,4 +1,6 @@
-const API_BASE = "http://localhost:3000";
+window.API_BASE = window.API_BASE || "https://sistema-tienda.onrender.com";
+
+//const API_BASE = "http://localhost:3000";
 
 // ========== CARGAR LISTA DE CLIENTES ==========
 async function cargarClientes() {
