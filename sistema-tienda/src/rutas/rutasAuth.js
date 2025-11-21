@@ -2,6 +2,14 @@ const express = require('express');
 const enrutador = express.Router();
 const authControlador = require('../controladores/authControlador');
 
+// Manejo explícito de OPTIONS para CORS preflight en /login
+enrutador.options('/login', (req, res) => {
+  res.header('Access-Control-Allow-Origin', '*'); // Solo para pruebas, ajusta en producción
+  res.header('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.sendStatus(200);
+});
+
 enrutador.post('/login', authControlador.login);
 enrutador.post('/registrar', authControlador.registrarUsuario);
 enrutador.get('/usuarios', authControlador.listarUsuarios);
