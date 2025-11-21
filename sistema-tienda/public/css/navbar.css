@@ -220,25 +220,42 @@ body {
     position: fixed;
     z-index: 1040;
   }
+  
+  .sidebar.menu-active {
+    height: auto;
+    max-height: 100vh;
+    overflow-y: auto;
+  }
+  
   .main-content {
     margin-left: 0;
     padding-top: 70px;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
-  .sidebar.menu-active {
-    overflow-y: auto;
-  }
+  
   .sidebar .sidebar-header {
     position: sticky;
     top: 0;
     z-index: 20;
-    border-radius: 16px;
+    border-radius: 0;
     background: #151A2D;
-    padding: 8px 10px;
+    padding: 8px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
+  
+  .sidebar-header .header-logo {
+    order: 1;
+  }
+  
   .sidebar-header .header-logo img {
     width: 40px;
     height: 40px;
+    margin-top: 0;
   }
+  
   .sidebar-header .sidebar-toggler,
   .sidebar-nav .nav-item:hover .nav-tooltip {
     display: none;
@@ -246,26 +263,80 @@ body {
   
   .sidebar-header .menu-toggler {
     display: flex;
-    height: 30px;
-    width: 30px;
+    height: 35px;
+    width: 35px;
+    order: 2;
   }
+  
   .sidebar-header .menu-toggler span {
-    font-size: 1.3rem;
+    font-size: 1.5rem;
   }
+  
+  .sidebar .sidebar-nav {
+    display: none;
+  }
+  
+  .sidebar.menu-active .sidebar-nav {
+    display: block;
+  }
+  
   .sidebar .sidebar-nav .nav-list {
-    padding: 0 10px;
+    padding: 10px 15px;
+    transform: translateY(0);
+    margin-top: 0;
   }
+  
+  .sidebar.collapsed .sidebar-nav .primary-nav {
+    transform: translateY(0);
+  }
+  
   .sidebar-nav .nav-link {
-    gap: 10px;
-    padding: 10px;
-    font-size: 0.94rem;
+    gap: 15px;
+    padding: 12px 15px;
+    font-size: 1rem;
   }
+  
   .sidebar-nav .nav-link .nav-icon {
-    font-size: 1.37rem;
+    font-size: 1.5rem;
   }
+  
   .sidebar-nav .secondary-nav {
     position: relative;
     bottom: 0;
-    margin: 40px 0 30px;
+    margin: 20px 0 10px;
+  }
+}
+
+/* Tablets y pantallas medianas */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .sidebar {
+    width: 200px;
+    height: 100vh;
+  }
+  
+  .main-content {
+    margin-left: 200px;
+    padding-top: 2rem;
+  }
+  
+  .sidebar-header .menu-toggler {
+    display: none;
+  }
+  
+  .sidebar .sidebar-nav {
+    display: block;
+  }
+}
+
+/* Móviles pequeños */
+@media (max-width: 480px) {
+  .sidebar-header .header-logo img {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .sidebar-nav .nav-link {
+    padding: 10px 12px;
+    font-size: 0.95rem;
   }
 }

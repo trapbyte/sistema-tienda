@@ -212,3 +212,245 @@ form button:hover {
 #tablaCajeros tr:hover {
   background: #dde4fb;
 }
+
+/* ==================== RESPONSIVE STYLES ==================== */
+
+/* Tablas responsive */
+@media (max-width: 768px) {
+  .table-responsive {
+    border: none;
+    margin: 0 -1rem;
+  }
+  
+  .table {
+    font-size: 0.85rem;
+  }
+  
+  .table th,
+  .table td {
+    padding: 0.5rem;
+    white-space: nowrap;
+  }
+  
+  .table thead th {
+    position: sticky;
+    top: 0;
+    background: #fff;
+    z-index: 10;
+  }
+}
+
+/* Cards y contenedores */
+@media (max-width: 768px) {
+  .container-fluid {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+  
+  .card {
+    margin-bottom: 1rem;
+    border-radius: 8px !important;
+  }
+  
+  .card-body {
+    padding: 1rem;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+  }
+  
+  h6 {
+    font-size: 1rem;
+  }
+}
+
+/* Formularios responsive */
+@media (max-width: 768px) {
+  .row.g-3 {
+    gap: 0.75rem !important;
+  }
+  
+  .form-label {
+    font-size: 0.9rem;
+    margin-bottom: 0.25rem;
+  }
+  
+  .form-control,
+  .form-select {
+    font-size: 16px; /* Previene zoom en iOS */
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .btn {
+    padding: 0.6rem 1rem;
+    font-size: 0.95rem;
+  }
+  
+  /* Columnas a full width en móvil */
+  .col-md-2,
+  .col-md-3,
+  .col-md-4,
+  .col-md-6 {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+/* Tabs responsive */
+@media (max-width: 768px) {
+  .nav-tabs {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-bottom: 2px solid #e3e6ee;
+    margin: 0 -0.5rem 1rem;
+    padding: 0 0.5rem;
+  }
+  
+  .nav-tabs .nav-link {
+    white-space: nowrap;
+    font-size: 0.85rem;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .nav-tabs::-webkit-scrollbar {
+    height: 4px;
+  }
+  
+  .nav-tabs::-webkit-scrollbar-thumb {
+    background: #1574c0;
+    border-radius: 4px;
+  }
+}
+
+/* Footer responsive */
+@media (max-width: 768px) {
+  .footer {
+    padding: 0.75rem 0;
+    font-size: 0.85rem;
+    margin-top: 1.5rem;
+  }
+}
+
+/* Dashboard - Métricas */
+@media (max-width: 768px) {
+  .row.g-4 {
+    gap: 1rem !important;
+  }
+  
+  /* Métricas apiladas */
+  .col-md-3,
+  .col-md-4 {
+    width: 100% !important;
+  }
+  
+  /* Cards de estadísticas más compactas */
+  .card.text-center h6 {
+    font-size: 0.85rem;
+  }
+  
+  .card.text-center h3 {
+    font-size: 1.5rem;
+  }
+}
+
+/* Gráficos responsive */
+@media (max-width: 768px) {
+  canvas {
+    max-width: 100%;
+    height: auto !important;
+  }
+  
+  .col-lg-5,
+  .col-lg-6,
+  .col-lg-7,
+  .col-lg-8 {
+    width: 100% !important;
+    margin-bottom: 1rem;
+  }
+}
+
+/* Buscadores */
+@media (max-width: 768px) {
+  #buscadorClientes,
+  #buscadorProductos,
+  #buscadorProveedores,
+  #buscadorCategorias,
+  #buscadorCajeros,
+  #buscadorCompras {
+    max-width: 100%;
+    margin-bottom: 1rem;
+  }
+}
+
+/* Alertas */
+@media (max-width: 768px) {
+  .alert {
+    font-size: 0.85rem;
+    padding: 0.75rem;
+  }
+}
+
+/* Badges y elementos inline */
+@media (max-width: 768px) {
+  .badge {
+    font-size: 0.75rem;
+    padding: 0.35em 0.5em;
+  }
+}
+
+/* Touch improvements */
+@media (hover: none) and (pointer: coarse) {
+  .btn,
+  .nav-link,
+  .form-control,
+  .form-select {
+    min-height: 44px;
+  }
+  
+  .table tr {
+    cursor: pointer;
+  }
+}
+
+/* Orientación landscape en móviles */
+@media (max-width: 768px) and (orientation: landscape) {
+  .main-content {
+    padding-top: 60px;
+  }
+  
+  .sidebar.menu-active {
+    max-height: 80vh;
+  }
+}
+
+/* Móviles extra pequeños */
+@media (max-width: 480px) {
+  body {
+    font-size: 14px;
+  }
+  
+  h2 {
+    font-size: 1.25rem;
+  }
+  
+  .card-body {
+    padding: 0.75rem;
+  }
+  
+  .btn {
+    font-size: 0.875rem;
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .table {
+    font-size: 0.75rem;
+  }
+  
+  .form-control,
+  .form-select {
+    font-size: 14px;
+  }
+}

@@ -60,77 +60,129 @@ enrutador.get('/factura/:nro_fac', compraControlador.obtenerFacturaDetallada); /
 
 // Ruta para descargar factura como PDF
 enrutador.get('/descargar-factura/:nro_fac', async (req, res) => {
+  let page = null;
   try {
     const { nro_fac } = req.params;
+    
+    // Validar parámetro
+    if (!nro_fac) {
+      return res.status(400).json({ mensaje: 'Número de factura requerido' });
+    }
+
+    // Obtener factura con detalles
     const factura = await compraControlador.obtenerFacturaDetalladaRaw(nro_fac);
-    if (!factura) return res.status(404).send('Factura no encontrada');
+    
+    if (!factura) {
+      return res.status(404).json({ mensaje: 'Factura no encontrada' });
+    }
+
+    // Verificar que tenga detalles
+    if (!factura.DetalleFacturas || factura.DetalleFacturas.length === 0) {
+      return res.status(400).json({ mensaje: 'La factura no tiene productos asociados' });
+    }
 
     // Leer la plantilla HTML
-    let html = fs.readFileSync(path.join(__dirname, '../../public/templates/factura.html'), 'utf8');
+    const templatePath = path.join(__dirname, '../../public/templates/factura.html');
+    
+    if (!fs.existsSync(templatePath)) {
+      return res.status(500).json({ mensaje: 'Plantilla de factura no encontrada' });
+    }
+
+    let html = fs.readFileSync(templatePath, 'utf8');
 
     // Generar las filas de la tabla de detalles
     let detallesHTML = '';
     factura.DetalleFacturas.forEach((det, idx) => {
+      const productoNombre = det.Producto?.nom_pro || 'Sin nombre';
+      const productoValor = det.Producto?.val_pro || det.val_uni_pro || 0;
+      
       detallesHTML += `
         <tr>
           <td class="item-number">${idx + 1}</td>
-          <td class="item-name">${det.Producto.nom_pro}</td>
-          <td>${det.cant_pro}</td>
-          <td class="item-price">$${Number(det.Producto.val_pro).toFixed(2)}</td>
-          <td class="item-price">$${Number(det.val_total_pro).toFixed(2)}</td>
+          <td class="item-name">${productoNombre}</td>
+          <td>${det.cant_pro || 0}</td>
+          <td class="item-price">$${Number(productoValor).toFixed(2)}</td>
+          <td class="item-price">$${Number(det.val_total_pro || 0).toFixed(2)}</td>
         </tr>
       `;
     });
 
-    // Reemplazar los placeholders (usando regex para reemplazar todas las ocurrencias)
+    // Formatear fecha
+    const fechaFormateada = factura.fec_fac 
+      ? new Date(factura.fec_fac).toLocaleString('es-ES', { 
+          year: 'numeric', 
+          month: 'long', 
+          day: 'numeric', 
+          hour: '2-digit', 
+          minute: '2-digit' 
+        })
+      : 'Fecha no disponible';
+
+    // Reemplazar placeholders
     html = html
       .replace(/\{\{detalles\}\}/g, detallesHTML)
-      .replace(/\{\{nro_fac\}\}/g, factura.nro_fac)
-      .replace(/\{\{fecha\}\}/g, new Date(factura.fec_fac).toLocaleString('es-ES', { 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric', 
-        hour: '2-digit', 
-        minute: '2-digit' 
-      }))
-      .replace(/\{\{cliente\}\}/g, factura.Cliente.nom_cli)
-      .replace(/\{\{telefono\}\}/g, factura.Cliente.tel_cli || 'N/A')
-      .replace(/\{\{direccion\}\}/g, factura.Cliente.dir_cli || 'N/A')
-      .replace(/\{\{cajero\}\}/g, factura.Cajero.nom_caj)
-      .replace(/\{\{total_factura\}\}/g, Number(factura.val_tot_fac).toFixed(2));
+      .replace(/\{\{nro_fac\}\}/g, factura.nro_fac || '')
+      .replace(/\{\{fecha\}\}/g, fechaFormateada)
+      .replace(/\{\{cliente\}\}/g, factura.Cliente?.nom_cli || 'Cliente no disponible')
+      .replace(/\{\{telefono\}\}/g, factura.Cliente?.tel_cli || 'N/A')
+      .replace(/\{\{direccion\}\}/g, factura.Cliente?.dir_cli || 'N/A')
+      .replace(/\{\{cajero\}\}/g, factura.Cajero?.nom_caj || 'Cajero no disponible')
+      .replace(/\{\{total_factura\}\}/g, Number(factura.val_tot_fac || 0).toFixed(2));
 
-    // Reutilizar el navegador en lugar de lanzar uno nuevo cada vez
+    // Obtener navegador reutilizable
     const browser = await getBrowser();
-    const page = await browser.newPage();
+    page = await browser.newPage();
     
-    try {
-      // Configurar viewport más pequeño para renderizado más rápido
-      await page.setViewport({ width: 800, height: 600 });
-      await page.setContent(html, { waitUntil: 'load', timeout: 5000 });
-      
-      const pdfBuffer = await page.pdf({
-        format: 'A4',
-        printBackground: true,
-        margin: {
-          top: '10mm',
-          right: '10mm',
-          bottom: '10mm',
-          left: '10mm'
-        },
-        preferCSSPageSize: false
-      });
-      
-      // Enviar el PDF
-      res.setHeader('Content-Type', 'application/pdf');
-      res.setHeader('Content-Disposition', `attachment; filename=factura_${nro_fac}.pdf`);
-      res.send(pdfBuffer);
-    } finally {
-      await page.close();
-    }
+    // Configurar viewport
+    await page.setViewport({ width: 800, height: 600 });
+    
+    // Cargar HTML con timeout
+    await page.setContent(html, { 
+      waitUntil: 'networkidle0', 
+      timeout: 10000 
+    });
+    
+    // Generar PDF
+    const pdfBuffer = await page.pdf({
+      format: 'A4',
+      printBackground: true,
+      margin: {
+        top: '10mm',
+        right: '10mm',
+        bottom: '10mm',
+        left: '10mm'
+      },
+      preferCSSPageSize: false,
+      timeout: 15000
+    });
+    
+    // Enviar PDF
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename=factura_${nro_fac}.pdf`);
+    res.setHeader('Content-Length', pdfBuffer.length);
+    res.send(pdfBuffer);
 
   } catch (error) {
-    console.error('Error al generar PDF:', error);
-    res.status(500).send('Error al generar el PDF');
+    console.error('❌ Error al generar PDF:', error);
+    
+    // Respuesta de error detallada
+    const errorMessage = error.message || 'Error desconocido';
+    const errorStack = process.env.NODE_ENV === 'development' ? error.stack : undefined;
+    
+    res.status(500).json({ 
+      mensaje: 'Error al generar el PDF', 
+      error: errorMessage,
+      stack: errorStack
+    });
+  } finally {
+    // Cerrar página si existe
+    if (page) {
+      try {
+        await page.close();
+      } catch (e) {
+        console.error('Error al cerrar página:', e);
+      }
+    }
   }
 });
 

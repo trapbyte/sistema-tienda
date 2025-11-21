@@ -35,35 +35,93 @@ async function cargarCompras() {
 // Función para descargar la factura como PDF
 async function descargarFactura(nro_fac) {
   try {
-    // Usar el endpoint del backend que genera un PDF hermoso con Puppeteer
+    // Mostrar indicador de carga
+    const btnDescarga = event.target.closest('button');
+    const textoOriginal = btnDescarga.innerHTML;
+    btnDescarga.disabled = true;
+    btnDescarga.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Generando...';
+    
     const url = `${API_BASE}/compras/descargar-factura/${nro_fac}`;
     
-    // Crear un enlace temporal para descargar el archivo
+    // Realizar la petición con manejo de errores
+    const response = await fetch(url);
+    
+    if (!response.ok) {
+      throw new Error(`Error del servidor: ${response.status} - ${response.statusText}`);
+    }
+    
+    // Verificar que la respuesta sea un PDF
+    const contentType = response.headers.get('content-type');
+    if (!contentType || !contentType.includes('application/pdf')) {
+      const errorText = await response.text();
+      throw new Error(`La respuesta no es un PDF válido. ${errorText}`);
+    }
+    
+    // Convertir la respuesta a blob
+    const blob = await response.blob();
+    
+    // Crear URL del blob y descargar
+    const downloadUrl = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
-    link.href = url;
+    link.href = downloadUrl;
     link.download = `factura_${nro_fac}.pdf`;
-    link.target = '_blank';
     document.body.appendChild(link);
     link.click();
-    document.body.removeChild(link);
     
-    // Alternativa: usando fetch si quieres mostrar un mensaje de espera
-    // const res = await fetch(url);
-    // if (!res.ok) throw new Error('Error al generar PDF');
-    // const blob = await res.blob();
-    // const downloadUrl = window.URL.createObjectURL(blob);
-    // const a = document.createElement('a');
-    // a.href = downloadUrl;
-    // a.download = `factura_${nro_fac}.pdf`;
-    // document.body.appendChild(a);
-    // a.click();
-    // window.URL.revokeObjectURL(downloadUrl);
-    // document.body.removeChild(a);
+    // Limpiar
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(downloadUrl);
+    
+    // Restaurar botón
+    btnDescarga.disabled = false;
+    btnDescarga.innerHTML = textoOriginal;
+    
+    // Mostrar mensaje de éxito
+    mostrarMensaje('Factura descargada correctamente', 'success');
     
   } catch (err) {
     console.error('Error al descargar la factura:', err);
-    alert("Error al descargar la factura");
+    
+    // Restaurar botón si existe
+    if (event && event.target) {
+      const btnDescarga = event.target.closest('button');
+      if (btnDescarga) {
+        btnDescarga.disabled = false;
+        btnDescarga.innerHTML = '<i class="bi bi-download"></i> Factura';
+      }
+    }
+    
+    // Mostrar mensaje de error detallado
+    let mensajeError = '❌ Error al descargar la factura';
+    
+    if (err.message.includes('500')) {
+      mensajeError += '\n\n🔧 Error del servidor al generar el PDF.\nPosibles causas:\n- La factura no existe\n- Faltan datos relacionados\n- Error en la base de datos\n\nPor favor, contacte al administrador.';
+    } else if (err.message.includes('404')) {
+      mensajeError += '\n\nLa factura no fue encontrada.';
+    } else if (err.message.includes('Failed to fetch')) {
+      mensajeError += '\n\nNo se pudo conectar con el servidor. Verifique su conexión a internet.';
+    } else {
+      mensajeError += '\n\n' + err.message;
+    }
+    
+    alert(mensajeError);
   }
+}
+
+// Función auxiliar para mostrar mensajes temporales
+function mostrarMensaje(mensaje, tipo = 'info') {
+  const alertDiv = document.createElement('div');
+  alertDiv.className = `alert alert-${tipo} alert-dismissible fade show position-fixed`;
+  alertDiv.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+  alertDiv.innerHTML = `
+    ${mensaje}
+    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  `;
+  document.body.appendChild(alertDiv);
+  
+  setTimeout(() => {
+    alertDiv.remove();
+  }, 5000);
 }
 
 // ========== REGISTRAR COMPRA ==========
